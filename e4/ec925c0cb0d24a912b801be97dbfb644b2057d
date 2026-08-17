@@ -1,0 +1,22 @@
+docs/architecture.md
+  s_a0ce08ea017ba1::t_07bf9a4ae4a3cc 132-133
+  s_a0ce08ea017ba1::t_fd2322d42745bf 111-112
+  s_a0ce08ea017ba1::t_99cf0719fd297f 1-98,101-110,113-131,134-427
+  s_a0ce08ea017ba1::t_0c457251903bdb 99-100
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "e4ec925c0cb0d24a912b801be97dbfb644b2057d",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
