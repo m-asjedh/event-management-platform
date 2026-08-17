@@ -1,0 +1,97 @@
+frontend/src/routes/events/$eventId/schedule.tsx
+  s_a0ce08ea017ba1::t_4495b30710862a 1-92
+frontend/src/components/schedule/ScheduleGrid.test.tsx
+  s_a0ce08ea017ba1::t_7105623e73937e 1-119
+frontend/src/lib/schedule/overlaps.ts
+  s_a0ce08ea017ba1::t_25cd556c7a4c98 1-43
+frontend/src/lib/schedule/overlaps.test.ts
+  s_a0ce08ea017ba1::t_8e1624dc69f31f 57-72
+  s_a0ce08ea017ba1::t_0465eb49715101 1-32,35-56,73-74
+  s_a0ce08ea017ba1::t_31f86b2e6fb0bf 33-34
+frontend/src/lib/api/types.ts
+  s_a0ce08ea017ba1::t_33b3a4dc823c4c 1-12
+docs/adr/0006-frontend-data-loading.md
+  s_a0ce08ea017ba1::t_63b6096fb18c03 1-31
+TRADEOFFS.md
+  s_a0ce08ea017ba1::t_526cdfe3ab45ab 82-98,104-105
+frontend/src/routes/index.tsx
+  s_a0ce08ea017ba1::t_78d746cc8d3a2d 2,4-6,8,11-15,17,21,24,30-31,37,39-69
+  s_a0ce08ea017ba1::t_a1cf942bbb7cad 18
+docker-compose.yml
+  s_a0ce08ea017ba1::t_3f8093f9e92a08 102-110
+frontend/src/components/api/ApiErrorView.tsx
+  s_a0ce08ea017ba1::t_f5e24858134d46 1-26
+README.md
+  s_a0ce08ea017ba1::t_53816c52ef3881 62,64-72,78
+frontend/src/lib/query/events.ts
+  s_a0ce08ea017ba1::t_d284afa238078c 1-17
+frontend/src/lib/tz/eventZone.test.ts
+  s_a0ce08ea017ba1::t_f6bb755c6593d0 1-26
+frontend/vitest.config.ts
+  s_a0ce08ea017ba1::t_f49ae80418e494 1-21
+frontend/src/components/api/ApiErrorView.test.tsx
+  s_a0ce08ea017ba1::t_34c43e005b1f95 1-22
+frontend/tsconfig.app.json
+  s_a0ce08ea017ba1::t_4ee92cb4f13696 31-32
+frontend/src/components/schedule/ScheduleGrid.tsx
+  s_a0ce08ea017ba1::t_44d160fe7044a4 44
+  s_a0ce08ea017ba1::t_d75d5a8bc97d42 1-43,45-102
+frontend/README.md
+  s_a0ce08ea017ba1::t_7e0866cf67a1a5 13-14,22-28
+frontend/src/components/schedule/SessionBlock.tsx
+  s_a0ce08ea017ba1::t_26a2c7e96a013c 2-67
+  s_a0ce08ea017ba1::t_863dd214379bc3 1
+frontend/src/lib/query/keys.ts
+  s_a0ce08ea017ba1::t_761b49028e4718 3-6
+frontend/src/lib/schedule/layout.ts
+  s_a0ce08ea017ba1::t_a6112778098a18 1-85
+frontend/src/lib/query/sessions.ts
+  s_a0ce08ea017ba1::t_ed5f2a6532c042 1-12
+frontend/src/components/auth/SignInForm.tsx
+  s_a0ce08ea017ba1::t_412064698ae4ad 1-67
+frontend/src/lib/api/client.ts
+  s_a0ce08ea017ba1::t_ce64ed441e59e7 1-2,12
+frontend/tsconfig.node.json
+  s_a0ce08ea017ba1::t_0905e4c2a31eba 22
+frontend/src/test/setup.ts
+  s_a0ce08ea017ba1::t_72a414e3317104 1-7
+frontend/src/main.tsx
+  s_a0ce08ea017ba1::t_3f32d49412de7d 10-13,15-19
+  s_a0ce08ea017ba1::t_b45b1babcc230f 6,14
+Makefile
+  s_a0ce08ea017ba1::t_e5cf9d24671cf0 98
+  s_a0ce08ea017ba1::t_00d7d4a42dcec3 10
+  s_a0ce08ea017ba1::t_5926c19c445d84 96-97,99
+frontend/src/lib/query/health.ts
+  s_a0ce08ea017ba1::t_4d0ba35a7154d5 1-2,5,11,14
+frontend/src/lib/query/rooms.ts
+  s_a0ce08ea017ba1::t_acd51259a3f9d0 1-12
+frontend/src/components/schedule/DayNav.tsx
+  s_a0ce08ea017ba1::t_ddfff4aa31df01 1-40
+frontend/src/lib/tz/eventZone.ts
+  s_a0ce08ea017ba1::t_88e7faa68b0276 1-95
+frontend/package.json
+  s_a0ce08ea017ba1::t_84fb91d7658c47 35
+  s_a0ce08ea017ba1::t_20bf9c5c61eb0a 28-30,40-41
+  s_a0ce08ea017ba1::t_cf16abb318ea9d 10
+frontend/src/lib/api/error.ts
+  s_a0ce08ea017ba1::t_2fb5228fdbcaa4 1-65
+frontend/package-lock.json
+  s_a0ce08ea017ba1::t_46f281873ac61b 24-26,31,36-37,40-67,260-269,318-432,1140-1146,1900-2016,2073-2185,2206-2228,2246-2265,2364-2373,2438-2441,2445-2448,2452-2453,2456-2490,2498-2514,2535-2541,2563-2582,2593-2612,2670-2696,2711-2733,2747-2753,2813-2852,3166-3175,3186-3195,3245-3265,3354-3366,3449-3473,3495-3501,3516-3529,3573-3599,3637-3643,3654-3680,3694-3700,3732-3748,3766-3821,4036-4148,4156-4249
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "712f6021736822effa05de114c263303a56f6963",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
