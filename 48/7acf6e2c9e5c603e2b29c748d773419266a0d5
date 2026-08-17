@@ -1,0 +1,28 @@
+backend/cmd/api/main.go
+  s_a0ce08ea017ba1::t_46c3b501302483 84-92
+  s_a0ce08ea017ba1::t_2f429bfd07e094 61
+backend/internal/identity/http.go
+  s_a0ce08ea017ba1::t_c889f6139c8a9b 55-58,60,62-63
+  s_a0ce08ea017ba1::t_c88fe9f4c532cc 43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "487acf6e2c9e5c603e2b29c748d773419266a0d5",
+  "prompts": {},
+  "humans": {
+    "h_3283e2518520ac": {
+      "author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
