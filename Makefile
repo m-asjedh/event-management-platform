@@ -7,7 +7,7 @@
 POSTGRES_USER ?= emp_user
 POSTGRES_DB   ?= event_management_platform
 
-.PHONY: up down reset migrate migrate-status migrate-down lint seed test contract psql db-version
+.PHONY: up down reset migrate migrate-status migrate-down lint seed test contract agent agent-scenarios psql db-version
 
 ## up: start the database, bring the schema up to date, then start auth and the API
 # Order matters: auth reads tables the migrations create, so it must not start first.
@@ -62,6 +62,19 @@ contract:
 	docker compose run --rm --build seed
 	docker compose up -d --wait --build api
 	docker compose run --rm --build contract
+
+## agent: read-only questions against the running API, as a real user
+# Sign-in is Better Auth HTTP. The binary only issues GET to the API.
+# QUESTION, AGENT_EMAIL, AGENT_PASSWORD are optional env vars.
+# No model key. The three scripted questions are `make agent-scenarios`.
+agent:
+	docker compose up -d --wait --build auth api
+	docker compose run --rm --build -e QUESTION -e AGENT_EMAIL -e AGENT_PASSWORD agent $(ARGS)
+
+## agent-scenarios: the three B8 questions against the seeded API
+agent-scenarios:
+	docker compose up -d --wait --build auth api
+	docker compose run --rm --build -T agent -scenarios
 
 ## psql: open a psql shell on the database
 psql:

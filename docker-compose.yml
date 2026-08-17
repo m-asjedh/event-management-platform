@@ -120,6 +120,24 @@ services:
       retries: 30
     restart: unless-stopped
 
+  agent:
+    build: ./backend
+    entrypoint: ["agent"]
+    environment:
+      API_URL: http://api:8080
+      AUTH_URL: http://auth:3001
+      AGENT_EMAIL: ${AGENT_EMAIL:-seed.admin@example.com}
+      AGENT_PASSWORD: ${AGENT_PASSWORD:-correct-horse-battery}
+      QUESTION: ${QUESTION:-}
+    stdin_open: true
+    tty: true
+    depends_on:
+      api:
+        condition: service_healthy
+      auth:
+        condition: service_healthy
+    profiles: ["tools"]
+
   api:
     build: ./backend
     entrypoint: ["api"]

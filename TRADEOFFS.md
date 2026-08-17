@@ -71,10 +71,13 @@ today. An unused column looks like abandoned work.
 **A shared helper for `23P01` → `ROOM_CONFLICT`.** `Apply` (PATCH) and `Insert` (POST) each translate
 the exclusion violation. Left duplicated so the PATCH store is not rewritten this pass.
 
+**Read-only agent.** A bounded GET loop over the public API, with the user's Better Auth cookie.
+No database, no extra key, no hosted model — a clean machine has no API key, and the three
+scenarios have to be deterministic in `make test`. Write access and a human-in-the-loop UI are later.
+
 ---
 
 ## What two more weeks would buy
 
-The next work that uses what is already here: session writes through `tz.Instant` and the room
-constraint, and an invitation list on the index we already measured. I am not pre-writing the
-frontend, the agent, or CI in this file.
+The next work that uses what is already here: the write-capable agent with an approval gate, and
+the frontend that makes that gate visible. I am not pre-writing those here.
