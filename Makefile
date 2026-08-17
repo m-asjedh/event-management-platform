@@ -7,7 +7,7 @@
 POSTGRES_USER ?= emp_user
 POSTGRES_DB   ?= event_management_platform
 
-.PHONY: up down reset migrate migrate-status migrate-down seed test psql db-version
+.PHONY: up down reset migrate migrate-status migrate-down lint seed test contract psql db-version
 
 ## up: start the database, bring the schema up to date, then start auth and the API
 # Order matters: auth reads tables the migrations create, so it must not start first.
@@ -30,6 +30,10 @@ reset:
 migrate:
 	docker compose run --rm --build migrate up
 
+## lint: check openapi/openapi.yaml with Redocly (file validity only, not the live server)
+lint:
+	docker compose run --rm lint
+
 ## migrate-status: show which migrations have been applied
 migrate-status:
 	docker compose run --rm migrate status
@@ -46,8 +50,18 @@ seed:
 	docker compose run --rm --build seed
 
 ## test: run Go tests inside Compose, against the local database
+# Does not start the API. Contract checks against the live server are `make contract`.
 test:
 	docker compose run --rm --build test
+
+## contract: start the API and check live responses against openapi/openapi.yaml
+# Seeded DB + real session cookies. Not lint — each case hits the running server.
+contract:
+	docker compose up -d --wait postgres
+	$(MAKE) migrate
+	docker compose run --rm --build seed
+	docker compose up -d --wait --build api
+	docker compose run --rm --build contract
 
 ## psql: open a psql shell on the database
 psql:

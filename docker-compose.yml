@@ -65,6 +65,34 @@ services:
         condition: service_healthy
     profiles: ["tools"]
 
+  lint:
+    image: node:22-alpine
+    working_dir: /spec
+    volumes:
+      - ./openapi:/spec
+    command: ["npx", "--yes", "@redocly/cli", "lint", "openapi.yaml"]
+    profiles: ["tools"]
+
+  contract:
+    build:
+      context: ./backend
+      target: test
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-emp_user}:${POSTGRES_PASSWORD:-emp_password}@postgres:5432/${POSTGRES_DB:-event_management_platform}?sslmode=disable
+      API_URL: http://api:8080
+      OPENAPI_PATH: /spec/openapi.yaml
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-dev-only-not-a-real-secret-000000000000}
+      TZ: Pacific/Auckland
+    volumes:
+      - ./openapi:/spec:ro
+    command: ["go", "test", "./internal/contract", "-count=1", "-timeout", "60s", "-v"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    profiles: ["tools"]
+
   # Off-the-shelf auth. It reads and writes the tables in the `auth` schema that the
   # migrations created; it is never allowed to manage schema itself.
   auth:
