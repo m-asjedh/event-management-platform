@@ -1,0 +1,41 @@
+# Secrets and local config
+.env
+.env.local
+.env.*.local
+
+# macOS
+.DS_Store
+.AppleDouble
+
+# Editors
+.idea/
+*.swp
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+auth/node_modules/
+auth/dist/
+
+# Go
+backend/bin/
+backend/tmp/
+*.test
+coverage.out
+
+# Test output
+playwright-report/
+test-results/
+
+# NOTE: the following are deliberately NOT ignored, because CI regenerates them
+# and fails if the committed version differs (see Makefile target `check-generated`):
+#
+#   backend/go.sum
+#   frontend/package-lock.json
+#   auth/package-lock.json
+#   backend/internal/api/api.gen.go      (generated from openapi/openapi.yaml)
+#   frontend/src/generated/api.ts        (generated from openapi/openapi.yaml)
+#
+# If these are not in git, the drift check cannot prove the contract and the code
+# still match. Do not add them here.
