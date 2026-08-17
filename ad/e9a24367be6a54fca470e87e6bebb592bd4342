@@ -1,0 +1,43 @@
+backend/internal/authz/grant.go
+  s_a0ce08ea017ba1::t_018d9f71699752 4-11
+  s_a0ce08ea017ba1::t_48d2a0a21047ea 12
+backend/internal/invitations/store.go
+  s_a0ce08ea017ba1::t_25708101aadbc2 1-39,41-47
+  s_a0ce08ea017ba1::t_d2118ce02bc67d 40
+backend/internal/invitations/cursor.go
+  s_a0ce08ea017ba1::t_b3a71e00744838 1-5,8-18,23-24,26
+  s_a0ce08ea017ba1::t_08920191511789 6-7,19-22,25
+backend/internal/invitations/http_test.go
+  s_a0ce08ea017ba1::t_66d23c43ba1e3e 76-78
+  s_a0ce08ea017ba1::t_66f92685531154 271
+  s_a0ce08ea017ba1::t_62af92cb2dabf7 286
+  s_a0ce08ea017ba1::t_762ff6f96e5614 391
+  s_a0ce08ea017ba1::t_76f7757648e538 372-374,379-382
+  s_a0ce08ea017ba1::t_4cf539261b7608 9,16
+  s_a0ce08ea017ba1::t_ba04dfa87bf045 1-8,10-15,17-75,79-270,272-285,287-371,375-378,383-390,392-404
+backend/cmd/api/main.go
+  s_a0ce08ea017ba1::t_0e4d1c592d938f 57
+  s_a0ce08ea017ba1::t_4900b0c809213e 84
+  s_a0ce08ea017ba1::t_768f6aa70e80cb 19
+backend/internal/invitations/http.go
+  s_a0ce08ea017ba1::t_50a58b90bcb02c 1-102
+openapi/openapi.yaml
+  s_a0ce08ea017ba1::t_bb6929fbc68103 374-428
+  s_a0ce08ea017ba1::t_942852f328e46d 848-889
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "ade9a24367be6a54fca470e87e6bebb592bd4342",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
