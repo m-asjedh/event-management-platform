@@ -3,10 +3,20 @@ import { createRouter, RouterProvider } from "@tanstack/react-router"
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 
+import { ApiError } from "@/lib/api/error"
 import { routeTree } from "./routeTree.gen"
 import "./index.css"
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error) => {
+        if (error instanceof ApiError && error.status < 500) return false
+        return failureCount < 2
+      },
+    },
+  },
+})
 
 const router = createRouter({
   routeTree,

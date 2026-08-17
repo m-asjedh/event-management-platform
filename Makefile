@@ -7,7 +7,7 @@
 POSTGRES_USER ?= emp_user
 POSTGRES_DB   ?= event_management_platform
 
-.PHONY: up down reset migrate migrate-status migrate-down lint seed test contract agent agent-scenarios gen-api check-generated frontend frontend-build psql db-version
+.PHONY: up down reset migrate migrate-status migrate-down lint seed test contract agent agent-scenarios gen-api check-generated frontend frontend-build frontend-test psql db-version
 
 ## up: start the database, bring the schema up to date, then start auth and the API
 # Order matters: auth reads tables the migrations create, so it must not start first.
@@ -92,6 +92,10 @@ frontend:
 ## frontend-build: tsc + vite build, for CI
 frontend-build:
 	docker compose --profile tools build frontend-build
+
+## frontend-test: Vitest schedule tests (not part of make test)
+frontend-test:
+	docker compose --profile tools run --rm frontend-test
 
 ## psql: open a psql shell on the database
 psql:

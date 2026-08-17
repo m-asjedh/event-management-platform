@@ -59,14 +59,21 @@ The three scripted scenarios:
 
 ## Frontend
 
-Scaffold only: Vite, TanStack Router, TanStack Query, Tailwind, shadcn/ui. Types are generated from `openapi/openapi.yaml`.
+Vite, TanStack Router, TanStack Query, Tailwind, shadcn/ui. Types are generated from `openapi/openapi.yaml`.
 
-The UI is not part of `make up`. Use `make frontend` after the stack is up (see **Running it**). Other targets:
+The UI is not part of `make up`. After the stack is up (see **Running it**):
+
+```bash
+make frontend          # http://localhost:5173
+```
+
+Sign in as `seed.admin@example.com` / `correct-horse-battery`. The home page lists events you can read; each one opens `/events/$eventId/schedule`.
+
+That schedule is **read-only**: rooms across, time down, one day at a time, with the week in the URL (`?day=YYYY-MM-DD`). Times are the event's IANA zone, not the browser. Same-room overlaps are striped and labelled Conflict. Drag-to-reschedule is not wired yet.
 
 ```bash
 make gen-api           # regenerate types after a spec change
 make check-generated   # CI: fail if committed types are stale
 make frontend-build    # tsc + vite build
+make frontend-test     # Vitest: slots, conflicts, event-zone times
 ```
-
-_Under construction._

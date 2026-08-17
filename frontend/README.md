@@ -1,5 +1,3 @@
-# Frontend
-
 Vite + TypeScript + TanStack Router + TanStack Query + Tailwind + shadcn/ui.
 
 Types come from `openapi/openapi.yaml`. Do not edit `src/generated/api.ts`.
@@ -12,7 +10,8 @@ To see the UI:
 make up && make seed && make frontend
 ```
 
-Then open http://localhost:5173.
+Then open http://localhost:5173, sign in, and open an event's week schedule at
+`/events/$eventId/schedule`. Times are the event IANA zone. Read-only; drag is next.
 
 Regenerate types after a spec change:
 
@@ -20,5 +19,11 @@ Regenerate types after a spec change:
 make gen-api
 ```
 
-CI runs `make check-generated` (fails if that file is stale) and `make frontend-build`.
+```bash
+make frontend-test     # Vitest
+make frontend-build    # tsc + vite build
+make check-generated   # fail if generated types are stale
+```
+
+CI runs `make check-generated` and `make frontend-build`.
 The frontend is not part of `make up`, so the under-5-minute backend path stays the same.

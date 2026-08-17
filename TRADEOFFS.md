@@ -79,12 +79,27 @@ scenarios have to be deterministic in `make test`. Write access and a human-in-t
 Hand-written response interfaces are not allowed. `make check-generated` regenerates the file and
 fails if git is dirty. The UI is not part of `make up` — a Vite pull would risk the 5-minute budget.
 
-**Data loading (scaffold).** TanStack Router owns the URL. TanStack Query owns server state.
-The placeholder route warms the cache with `ensureQueryData`. Mutations are not built yet.
+**Data loading.** TanStack Router owns where the user is: `/events/$eventId/schedule` and `?day=`
+(ADR 0006). TanStack Query owns server data: the route loader calls `ensureQueryData` for event,
+rooms, and sessions; the page reads the same query options with `useSuspenseQuery`. Mutations are
+not built yet.
+
+**Schedule layout.** Rooms as columns, time as rows, one selected day. Seed sessions sit on an
+hourly room grid; a same-room clash is then two blocks in one column. A days-across week would hide
+that unless every day was also split by room. Week navigation is the URL so a day is shareable.
+
+**Event-zone display.** Instants are formatted with `Intl.DateTimeFormat` and the event's IANA name
+from `GET /events/{id}`. The browser zone is never used. Proven under `TZ=Pacific/Auckland`.
+
+**Conflicts.** Same-room overlaps are computed client-side from the fetched sessions (`[start, end)`).
+The database still rejects room double-booking on write; the view has to be able to *show* a clash
+(speaker overlaps are not in `GET /sessions`, so they cannot be marked).
+
+**Read-only.** `SessionBlock` is the chip drag will attach to. No mutation is wired.
 
 ---
 
 ## What two more weeks would buy
 
-The next work that uses what is already here: the schedule view, drag-to-reschedule recovery, and
-the write-capable agent UI. I am not pre-writing those here.
+The next work that uses what is already here: drag-to-reschedule with optimistic update and rollback
+on `ROOM_CONFLICT` / `STALE_VERSION`, and the write-capable agent UI. I am not pre-writing those here.
