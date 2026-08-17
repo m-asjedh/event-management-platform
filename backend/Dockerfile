@@ -14,6 +14,11 @@ COPY . .
 
 RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/ ./cmd/...
 
+# Keep this stage before the runtime image so `docker compose build` without a
+# target still produces the small api/migrate/seed image.
+FROM build AS test
+CMD ["go", "test", "./..."]
+
 FROM alpine:3.22
 
 # Not root, and no shell access needed to run a compiled binary.

@@ -7,7 +7,7 @@
 POSTGRES_USER ?= emp_user
 POSTGRES_DB   ?= event_management_platform
 
-.PHONY: up down reset migrate migrate-status migrate-down seed psql db-version
+.PHONY: up down reset migrate migrate-status migrate-down seed test psql db-version
 
 ## up: start the database, bring the schema up to date, then start auth and the API
 # Order matters: auth reads tables the migrations create, so it must not start first.
@@ -44,6 +44,10 @@ migrate-down:
 # in docker-compose.yml, and the binary refuses any other host.
 seed:
 	docker compose run --rm --build seed
+
+## test: run Go tests inside Compose, against the local database
+test:
+	docker compose run --rm --build test
 
 ## psql: open a psql shell on the database
 psql:
