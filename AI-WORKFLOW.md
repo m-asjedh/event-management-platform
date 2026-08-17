@@ -24,23 +24,31 @@ git log --show-notes=ai   # attribution per commit
 
 **I drove**
 
-- Time at the edge: a local wall clock must map to a unique instant, or the write is refused. Go's
-  `time.Date` is not that mapping. Session create/update must go through `tz.Instant` when those
-  handlers exist — the helper only protects writes that actually call it.
+- Track 3 (Fullstack): the interesting problem is the seam, not a deeper backend or a bigger agent.
+- Authorization as one chokepoint (`Grant.Can`) that also filters the response body. No `if role ==`.
+- Room double-booking in PostgreSQL. Check-then-insert is a race.
+- Speaker double-booking is not a database constraint. That is a cut, not a missing feature.
+- Domain keys are uuidv7. The invitations cursor is `(event_id, id)`, not `(created_at, id)`.
+- Times are `timestamptz` plus the event's IANA zone. A local wall clock becomes an instant only
+  through `tz.Instant`. Session create/update must use that helper when those handlers exist.
+- Auth is Better Auth inside Compose, so `make up` does not need an external account.
 
 **I delegated**
 
-- The first pass at "write the DST tests" looked like testing existing conversion. There was no
-  conversion package. The model reached for `time.Date`. That is the call I rejected, not the tests.
+- Compose, Dockerfiles, Makefile, first-draft SQL, handler and store boilerplate.
+- The seed's COPY loop, once the counts, fixtures, and "uuidv7 in Go" rule were fixed.
+- First drafts of the ADRs and of the DST tests. Both needed catching (below).
 
 ---
 
 ## How I planned
 
-For the DST tests: what must be true (a civil time is one instant, or it is not a time we accept),
-where that is enforced (the edge, `internal/tz`, not the database and not the test), what the caller
-gets (`ErrNonexistentLocalTime` / `ErrAmbiguousLocalTime`, not a nearby instant), and which test
-proves each case. The tests call `Instant` and `WallClock`. They do not reimplement conversion.
+Before a slice of work:
+
+1. What must stay true after two writes, a DST day, or an attendee GET.
+2. Where that is enforced (database, `authz`, `tz`, not the test and not a comment).
+3. What the caller gets if it fails — a code, not a nearby "corrected" value.
+4. Which test proves it, using the real function, not a copy of the logic.
 
 ---
 
@@ -50,7 +58,43 @@ Rules for this section: paste the actual code, not a description of it. Say why 
 it looked obviously wrong it is not worth recording. Say how I noticed. Name the test that catches it
 now.
 
-### `time.Date` as a local-time parser
+### 1. ADRs that put back decisions I had already rejected
+
+The first ADR / architecture drafts looked finished. They compiled as prose. They quietly put back
+two things I had already said no to.
+
+**Speaker constraint.** I had already cut database-enforced speaker clashes: an exclusion cannot
+span `sessions` and `session_speakers` without copying times onto the join table and keeping them in
+sync. The draft put the copy back, as if Track 1's "room or speaker" wording were ours:
+
+```sql
+ALTER TABLE session_speakers
+    ADD COLUMN during TSTZRANGE NOT NULL,
+    ADD CONSTRAINT session_speakers_no_overlap
+        UNIQUE (user_id, during WITHOUT OVERLAPS);
+```
+
+That looks correct. It is the PostgreSQL 18 form. It would even work — until a session is moved and
+the copied `during` is not. Then the constraint guards the old time and says nothing.
+
+**Extra timestamp for paging.** I had already chosen uuidv7 so `id` *is* the order. The draft still
+keyed the invitation list on `created_at`, which is what every pagination tutorial does:
+
+```sql
+CREATE INDEX idx_invitations_keyset
+    ON invitations (event_id, created_at DESC, id DESC);
+```
+
+That looks correct. It works. It also duplicates order that the primary key already has, which is
+the alternative ADR 0004 rejects.
+
+I noticed both by reading the draft against the decisions I had already written, not by waiting for
+a test to fail. What shipped instead: `session_speakers` has no `during` column; ADR 0002 records
+the speaker cut; the index is `invitations_event_id_id_idx ON invitations (event_id, id)`.
+
+There is no test that "catches an ADR". The proof it did not land is `backend/migrations/00003_domain.sql`.
+
+### 2. `time.Date` as a local-time parser
 
 The task was: prove time-zone handling. The obvious next step was "test the conversion we already
 have." There was no conversion. The seeder (and the stdlib call anyone reaches for) is this:
@@ -99,3 +143,4 @@ Caught by:
 | 2026-08-17 | git-ai installed and verified before the first commit. Repo created, notes pushed. |
 | 2026-08-17 | Seed via COPY (~800ms, 50k invitations). Shared scrypt hash is a seed-speed choice. uuidv7 minted in Go so COPY has parent IDs and reruns match. Invitations keyset EXPLAIN captured in docs/postgres-18.md. |
 | 2026-08-17 | DST edge: `time.Date` turns 02:30 on 2026-03-08 NY into 01:30 EST with no error. `internal/tz.Instant` refuses gaps and folds. Three tests in `tz_test.go`. Seed rows were fine (09:00–16:00). Session writes must use `Instant` when those handlers exist. |
+| 2026-08-17 | AI-WORKFLOW: ADR drafts had put back the speaker exclusion and a `created_at` keyset index. TRADEOFFS.md started from the cuts that already exist. |
