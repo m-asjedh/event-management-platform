@@ -22,15 +22,16 @@ git log --show-notes=ai   # attribution per commit
 
 ## What I drove vs. what I delegated
 
+What exists today: Postgres 18, Better Auth in Compose, data-driven authz, room exclusion, a 50k
+seed, `tz.Instant`, and GET `/healthz` `/me` `/events/{id}`.
+
 **I drove**
 
-- Track 3 (Fullstack): the interesting problem is the seam, not a deeper backend or a bigger agent.
 - Authorization as one chokepoint (`Grant.Can`) that also filters the response body. No `if role ==`.
 - Room double-booking in PostgreSQL. Check-then-insert is a race.
 - Speaker double-booking is not a database constraint. That is a cut, not a missing feature.
-- Domain keys are uuidv7. The invitations cursor is `(event_id, id)`, not `(created_at, id)`.
-- Times are `timestamptz` plus the event's IANA zone. A local wall clock becomes an instant only
-  through `tz.Instant`. Session create/update must use that helper when those handlers exist.
+- Domain keys are uuidv7. The invitations index is `(event_id, id)`, not `(created_at, id)`.
+- Times are `timestamptz` plus the event's IANA zone. `tz.Instant` is the parse edge; `time.Date` is not.
 - Auth is Better Auth inside Compose, so `make up` does not need an external account.
 
 **I delegated**
@@ -43,12 +44,9 @@ git log --show-notes=ai   # attribution per commit
 
 ## How I planned
 
-Before a slice of work:
-
-1. What must stay true after two writes, a DST day, or an attendee GET.
-2. Where that is enforced (database, `authz`, `tz`, not the test and not a comment).
-3. What the caller gets if it fails — a code, not a nearby "corrected" value.
-4. Which test proves it, using the real function, not a copy of the logic.
+For the slices that are in the repo: decide what must stay true (a grant, a room, a unique instant),
+put it in the database or in one function, then write a test that calls that function. I have not
+planned the frontend or the agent here. Those are not built yet.
 
 ---
 
@@ -65,7 +63,7 @@ two things I had already said no to.
 
 **Speaker constraint.** I had already cut database-enforced speaker clashes: an exclusion cannot
 span `sessions` and `session_speakers` without copying times onto the join table and keeping them in
-sync. The draft put the copy back, as if Track 1's "room or speaker" wording were ours:
+sync. The draft put the copy back:
 
 ```sql
 ALTER TABLE session_speakers
@@ -78,7 +76,7 @@ That looks correct. It is the PostgreSQL 18 form. It would even work — until a
 the copied `during` is not. Then the constraint guards the old time and says nothing.
 
 **Extra timestamp for paging.** I had already chosen uuidv7 so `id` *is* the order. The draft still
-keyed the invitation list on `created_at`, which is what every pagination tutorial does:
+keyed the invitation list on `created_at`:
 
 ```sql
 CREATE INDEX idx_invitations_keyset
@@ -142,5 +140,5 @@ Caught by:
 | ---------- | ---------------------------------------------------------------------------------- |
 | 2026-08-17 | git-ai installed and verified before the first commit. Repo created, notes pushed. |
 | 2026-08-17 | Seed via COPY (~800ms, 50k invitations). Shared scrypt hash is a seed-speed choice. uuidv7 minted in Go so COPY has parent IDs and reruns match. Invitations keyset EXPLAIN captured in docs/postgres-18.md. |
-| 2026-08-17 | DST edge: `time.Date` turns 02:30 on 2026-03-08 NY into 01:30 EST with no error. `internal/tz.Instant` refuses gaps and folds. Three tests in `tz_test.go`. Seed rows were fine (09:00–16:00). Session writes must use `Instant` when those handlers exist. |
-| 2026-08-17 | AI-WORKFLOW: ADR drafts had put back the speaker exclusion and a `created_at` keyset index. TRADEOFFS.md started from the cuts that already exist. |
+| 2026-08-17 | DST edge: `time.Date` turns 02:30 on 2026-03-08 NY into 01:30 EST with no error. `internal/tz.Instant` refuses gaps and folds. Three tests in `tz_test.go`. Seed rows were fine (09:00–16:00). |
+| 2026-08-17 | AI-WORKFLOW: ADR drafts had put back the speaker exclusion and a `created_at` keyset index. TRADEOFFS.md is the cuts that already exist, not the rest of the track. |
