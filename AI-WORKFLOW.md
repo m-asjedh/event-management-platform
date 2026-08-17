@@ -48,3 +48,4 @@ now.
 | Date       | Notes                                                                              |
 | ---------- | ---------------------------------------------------------------------------------- |
 | 2026-08-17 | git-ai installed and verified before the first commit. Repo created, notes pushed. |
+| 2026-08-17 | Seed via COPY (~800ms, 50k invitations). Shared scrypt hash is a seed-speed choice. uuidv7 minted in Go so COPY has parent IDs and reruns match. Invitations keyset EXPLAIN captured in docs/postgres-18.md. |

@@ -7,7 +7,7 @@
 POSTGRES_USER ?= emp_user
 POSTGRES_DB   ?= event_management_platform
 
-.PHONY: up down reset migrate migrate-status migrate-down psql db-version
+.PHONY: up down reset migrate migrate-status migrate-down seed psql db-version
 
 ## up: start the database, bring the schema up to date, then start auth and the API
 # Order matters: auth reads tables the migrations create, so it must not start first.
@@ -37,6 +37,13 @@ migrate-status:
 ## migrate-down: roll back the most recent migration
 migrate-down:
 	docker compose run --rm migrate down
+
+## seed: fill the migrated database with the scale dataset
+# Safe to repeat: the seeder truncates domain and auth rows first, then COPY.
+# Only the Compose postgres service: DATABASE_URL is hardcoded to host `postgres`
+# in docker-compose.yml, and the binary refuses any other host.
+seed:
+	docker compose run --rm --build seed
 
 ## psql: open a psql shell on the database
 psql:

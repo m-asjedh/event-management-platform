@@ -42,6 +42,16 @@ services:
         condition: service_healthy
     profiles: ["tools"]
 
+  seed:
+    build: ./backend
+    entrypoint: ["seed"]
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-emp_user}:${POSTGRES_PASSWORD:-emp_password}@postgres:5432/${POSTGRES_DB:-event_management_platform}?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles: ["tools"]
+
   # Off-the-shelf auth. It reads and writes the tables in the `auth` schema that the
   # migrations created; it is never allowed to manage schema itself.
   auth:

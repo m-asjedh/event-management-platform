@@ -16,4 +16,6 @@ make up && make seed && make test
 
 Requires Docker, Docker Compose and make. Nothing else.
 
+`make seed` only talks to the local Compose database. It truncates first so it can rerun. All seed accounts share one real scrypt hash to keep seeding fast; not a production pattern. Demo password: `correct-horse-battery`.
+
 _Under construction._
