@@ -1,0 +1,251 @@
+openapi: 3.1.0
+info:
+  title: Event Management Platform API
+  version: 0.1.0
+  description: |
+    Domain API only. Sign-up and sign-in are owned by Better Auth and are not
+    in this spec.
+
+    Partial contract: only the routes that exist today. GET /events/{id} is
+    role-dependent. The same Grant.Can check that allows the request also
+    decides which fields are present.
+
+servers:
+  - url: http://localhost:8080
+
+security: []
+
+paths:
+  /healthz:
+    get:
+      operationId: getHealth
+      summary: Liveness check
+      description: Open. No session cookie required.
+      responses:
+        "200":
+          description: Process is up
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Health"
+
+  /me:
+    get:
+      operationId: getMe
+      summary: Current user
+      description: |
+        The caller identified by the Better Auth session cookie.
+        Returns that person's own id, name, and email.
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          description: Signed-in user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Me"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "500":
+          $ref: "#/components/responses/Internal"
+
+  /events/{id}:
+    get:
+      operationId: getEvent
+      summary: Get one event
+      description: |
+        Returns a single event the caller belongs to.
+
+        The response body is role-dependent. PresentEvent uses the same
+        Grant.Can check as the URL:
+
+        - member.read — include members. Without it the key is omitted
+          (attendee). Go omitempty: the field is absent, not null.
+        - user.email.read — include email on each member. Without it each
+          email field is omitted, not null.
+
+        Admin and contributor currently hold both permissions. Attendee
+        holds neither, so the attendee body is the event fields only.
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Event. Roster and emails only when the grant allows them.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+              examples:
+                admin:
+                  summary: Admin or contributor — roster and emails present
+                  value:
+                    id: "01a00fb3-c792-76a7-9336-6d5ef6a9577a"
+                    name: Test Conf
+                    description: Just a conference
+                    timeZone: Europe/Berlin
+                    startsAt: "2026-03-28T19:00:00Z"
+                    endsAt: "2026-03-30T16:00:00Z"
+                    members:
+                      - userId: 0fXEL014POMXqTQolyl1IvbdA4uZ0PD0
+                        name: Admin Ada
+                        email: admin@example.com
+                        role: admin
+                attendee:
+                  summary: Attendee — no members key, no emails
+                  value:
+                    id: "01a00fb3-c792-76a7-9336-6d5ef6a9577a"
+                    name: Test Conf
+                    description: Just a conference
+                    timeZone: Europe/Berlin
+                    startsAt: "2026-03-28T19:00:00Z"
+                    endsAt: "2026-03-30T16:00:00Z"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/Internal"
+
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: better-auth.session_token
+      description: Signed Better Auth session cookie. Go looks up auth.sessions.
+
+  responses:
+    Unauthenticated:
+      description: No cookie, bad signature, or expired session
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            code: UNAUTHENTICATED
+            reason: not signed in
+    Forbidden:
+      description: Signed in, but not a member of this event, or lacking event.read
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            code: FORBIDDEN
+            reason: not allowed
+    NotFound:
+      description: Event id does not exist
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            code: NOT_FOUND
+            reason: event not found
+    Internal:
+      description: Unexpected failure
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            code: INTERNAL
+            reason: grant lookup failed
+
+  schemas:
+    Error:
+      type: object
+      additionalProperties: false
+      required: [code, reason]
+      properties:
+        code:
+          type: string
+          description: Machine-readable code the server actually returns today.
+          enum:
+            - UNAUTHENTICATED
+            - FORBIDDEN
+            - NOT_FOUND
+            - INTERNAL
+        reason:
+          type: string
+
+    Health:
+      type: object
+      additionalProperties: false
+      required: [status]
+      properties:
+        status:
+          type: string
+          const: ok
+
+    Me:
+      type: object
+      additionalProperties: false
+      required: [id, name, email]
+      properties:
+        id:
+          type: string
+          description: Better Auth user id. Text, not uuid.
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+
+    Member:
+      type: object
+      additionalProperties: false
+      required: [userId, name, role]
+      properties:
+        userId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+          description: |
+            Omitted when the grant lacks user.email.read. Not sent as null —
+            Go omitempty drops an empty string.
+        role:
+          type: string
+          enum: [admin, contributor, attendee]
+
+    Event:
+      type: object
+      additionalProperties: false
+      required: [id, name, description, timeZone, startsAt, endsAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        timeZone:
+          type: string
+          description: IANA zone name stored on the event
+        startsAt:
+          type: string
+          format: date-time
+        endsAt:
+          type: string
+          format: date-time
+        members:
+          type: array
+          items:
+            $ref: "#/components/schemas/Member"
+          description: |
+            Omitted when the grant lacks member.read (attendee). Not sent as
+            null — Go omitempty drops a nil slice.
