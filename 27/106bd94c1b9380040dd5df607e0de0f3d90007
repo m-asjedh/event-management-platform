@@ -1,0 +1,40 @@
+backend/go.mod
+  s_a0ce08ea017ba1::t_6dd12fec50be06 6,15-17,22-25
+backend/internal/contract/harness.go
+  s_a0ce08ea017ba1::t_abf2a3ad5976ff 44
+  s_a0ce08ea017ba1::t_7fb282dd5f7687 109-115
+  s_a0ce08ea017ba1::t_d8595e06ca1f4f 1-43,45-108,116-227
+Makefile
+  s_a0ce08ea017ba1::t_9011c140c36f00 10
+  s_a0ce08ea017ba1::t_62d9c66ba7e094 33-35
+  s_a0ce08ea017ba1::t_4a0aa0157c847c 53,57-64
+  s_a0ce08ea017ba1::t_d1debe2a42d3f6 36,65
+.github/workflows/ci.yml
+  s_a0ce08ea017ba1::t_a39803d901b800 1-27
+backend/internal/contract/honours_test.go
+  s_a0ce08ea017ba1::t_c09ebfab4ac25b 13
+  s_a0ce08ea017ba1::t_491d0143c650d2 1-12,14-161,163-192,194-239
+  s_a0ce08ea017ba1::t_e7b2ac6341266a 162
+  s_a0ce08ea017ba1::t_5f288ee0434c12 193
+docker-compose.yml
+  s_a0ce08ea017ba1::t_9eb92e204b2091 68-87,89-95
+  s_a0ce08ea017ba1::t_e333e2f2de6638 88
+backend/go.sum
+  s_a0ce08ea017ba1::t_6f7aefe94798d2 7-8,11-18,24-25,36-39,50-53,60-63,82-83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "27106bd94c1b9380040dd5df607e0de0f3d90007",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
