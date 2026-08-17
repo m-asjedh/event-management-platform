@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest"
 import {
   formatEventTime,
   instantToYmd,
+  wallClockToInstant,
   zonedParts,
 } from "@/lib/tz/eventZone"
 
@@ -22,5 +23,12 @@ describe("event zone wall clock", () => {
       `${machine.hour.toString().padStart(2, "0")}:${machine.minute.toString().padStart(2, "0")}`,
     ).toBe("02:00")
     expect(formatEventTime(instant, eventZone)).not.toBe("02:00")
+  })
+
+  it("converts event-local wall clock to an instant without using the machine zone", () => {
+    expect(process.env.TZ).toBe("Pacific/Auckland")
+    const iso = wallClockToInstant("America/New_York", "2026-03-08T09:00:00")
+    expect(formatEventTime(iso, "America/New_York")).toBe("09:00")
+    expect(iso).toBe("2026-03-08T13:00:00.000Z")
   })
 })

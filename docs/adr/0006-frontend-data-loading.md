@@ -7,7 +7,9 @@ state (`?day=` on the schedule). The route loader preloads data the page cannot 
 without, via `ensureQueryData`.
 
 TanStack Query owns **what server data they are looking at**: caches, refetch, and
-(later) mutations with optimistic update and rollback.
+mutations with optimistic update and rollback. Drag-to-reschedule patches
+`/sessions/{id}` and reconciles from the typed error envelope (`ROOM_CONFLICT`
+rolls back the snapshot; `STALE_VERSION` applies `conflict.currentState`).
 
 The schedule page uses the same query options in the loader and in
 `useSuspenseQuery`, so the component stays subscribed to the cache.

@@ -69,7 +69,9 @@ make frontend          # http://localhost:5173
 
 Sign in as `seed.admin@example.com` / `correct-horse-battery`. The home page lists events you can read; each one opens `/events/$eventId/schedule`.
 
-That schedule is **read-only**: rooms across, time down, one day at a time, with the week in the URL (`?day=YYYY-MM-DD`). Times are the event's IANA zone, not the browser. Same-room overlaps are striped and labelled Conflict. Drag-to-reschedule is not wired yet.
+That schedule shows rooms across and time down, in the event's IANA zone. Drag a session to a new
+room or time. A rejected write rolls the block back (or to `currentState` on `STALE_VERSION`); the
+grid always matches the server.
 
 ```bash
 make gen-api           # regenerate types after a spec change

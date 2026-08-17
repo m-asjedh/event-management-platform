@@ -81,8 +81,9 @@ fails if git is dirty. The UI is not part of `make up` — a Vite pull would ris
 
 **Data loading.** TanStack Router owns where the user is: `/events/$eventId/schedule` and `?day=`
 (ADR 0006). TanStack Query owns server data: the route loader calls `ensureQueryData` for event,
-rooms, and sessions; the page reads the same query options with `useSuspenseQuery`. Mutations are
-not built yet.
+rooms, and sessions; the page reads the same query options with `useSuspenseQuery`. Drag uses a
+Query mutation: optimistic cache, then `onError` rolls back (or applies `currentState` on
+`STALE_VERSION`) without a refetch.
 
 **Schedule layout.** Rooms as columns, time as rows, one selected day. Seed sessions sit on an
 hourly room grid; a same-room clash is then two blocks in one column. A days-across week would hide
@@ -90,16 +91,23 @@ that unless every day was also split by room. Week navigation is the URL so a da
 
 **Event-zone display.** Instants are formatted with `Intl.DateTimeFormat` and the event's IANA name
 from `GET /events/{id}`. The browser zone is never used. Proven under `TZ=Pacific/Auckland`.
+PATCH sends the same event-local wall clock the user saw (`2026-03-08T10:00:00`, no offset).
 
 **Conflicts.** Same-room overlaps are computed client-side from the fetched sessions (`[start, end)`).
 The database still rejects room double-booking on write; the view has to be able to *show* a clash
 (speaker overlaps are not in `GET /sessions`, so they cannot be marked).
 
-**Read-only.** `SessionBlock` is the chip drag will attach to. No mutation is wired.
+**Drag.** `@dnd-kit/core` (pointer) on `SessionBlock`. Native HTML5 DnD is a poor fit for a
+positioned grid and for tests. Drop computes room + snapped time; the mutation is the source of
+truth, not the drag library.
+
+**Rejection recovery.** Both room clash and stale version are HTTP 409; the client branches on
+`code`. `ROOM_CONFLICT` restores the snapshot. `STALE_VERSION` writes `conflict.currentState` into
+the cache — not the optimistic slot, not a blank, not a silent overwrite.
 
 ---
 
 ## What two more weeks would buy
 
-The next work that uses what is already here: drag-to-reschedule with optimistic update and rollback
-on `ROOM_CONFLICT` / `STALE_VERSION`, and the write-capable agent UI. I am not pre-writing those here.
+The next work that uses what is already here: the write-capable agent UI with an approval gate.
+I am not pre-writing that here.

@@ -16,6 +16,42 @@ function pad2(n: number): string {
   return n.toString().padStart(2, "0")
 }
 
+export function minutesToWall(ymd: string, minutes: number): string {
+  const h = Math.floor(minutes / 60)
+  const m = minutes % 60
+  return `${ymd}T${pad2(h)}:${pad2(m)}:00`
+}
+
+/**
+ * Convert event-local wall clock (`2026-03-08T09:00:00`, no offset) to an
+ * RFC 3339 instant. Offset is derived from the event zone, not the machine.
+ */
+export function wallClockToInstant(timeZone: string, wall: string): string {
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(wall)
+  if (!match) {
+    throw new Error(`invalid wall clock: ${wall}`)
+  }
+  const year = Number(match[1])
+  const month = Number(match[2])
+  const day = Number(match[3])
+  const hour = Number(match[4])
+  const minute = Number(match[5])
+  const asUtc = Date.UTC(year, month - 1, day, hour, minute)
+  let guess = asUtc
+  for (let i = 0; i < 3; i++) {
+    const parts = zonedParts(new Date(guess), timeZone)
+    const shownAsUtc = Date.UTC(
+      parts.year,
+      parts.month - 1,
+      parts.day,
+      parts.hour,
+      parts.minute,
+    )
+    guess = asUtc - (shownAsUtc - guess)
+  }
+  return new Date(guess).toISOString()
+}
+
 export function zonedParts(instant: string | Date, timeZone: string): ZonedParts {
   const date = typeof instant === "string" ? new Date(instant) : instant
   const fmt = new Intl.DateTimeFormat("en-GB", {

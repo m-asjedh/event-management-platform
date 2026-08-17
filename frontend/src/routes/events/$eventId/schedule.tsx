@@ -3,7 +3,7 @@ import { Link, createFileRoute } from "@tanstack/react-router"
 
 import { ApiErrorView } from "@/components/api/ApiErrorView"
 import { DayNav } from "@/components/schedule/DayNav"
-import { ScheduleGrid } from "@/components/schedule/ScheduleGrid"
+import { ScheduleBoard } from "@/components/schedule/ScheduleBoard"
 import { eventQuery } from "@/lib/query/events"
 import { roomsQuery } from "@/lib/query/rooms"
 import { sessionsQuery } from "@/lib/query/sessions"
@@ -63,7 +63,8 @@ function SchedulePage() {
       <h1 className="mt-2 text-2xl font-semibold">{event.name}</h1>
       <p className="mt-1 text-sm text-neutral-600">
         Times in <span className="font-mono">{event.timeZone}</span>, not the
-        browser zone. Read-only — drag is not wired yet.
+        browser zone. Drag a session to a new room or time. Rejections roll back
+        to server truth.
       </p>
 
       {sessions.length === 0 ? (
@@ -77,12 +78,7 @@ function SchedulePage() {
             <p className="mt-8 text-neutral-700">No sessions on {day}.</p>
           ) : (
             <div className="mt-4">
-              <ScheduleGrid
-                event={event}
-                rooms={rooms}
-                sessions={sessions}
-                day={day}
-              />
+              <ScheduleBoard event={event} rooms={rooms} day={day} />
             </div>
           )}
         </>
