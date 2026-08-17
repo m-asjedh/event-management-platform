@@ -1,14 +1,15 @@
 package authz
 
 const (
-	EventRead     = "event.read"
-	MemberRead    = "member.read"
-	UserEmailRead = "user.email.read"
-	SessionRead   = "session.read"
-	SessionCreate = "session.create"
-	SessionUpdate = "session.update"
-	RoomRead      = "room.read"
-	RoomManage    = "room.manage"
+	EventRead      = "event.read"
+	MemberRead     = "member.read"
+	UserEmailRead  = "user.email.read"
+	SessionRead    = "session.read"
+	SessionCreate  = "session.create"
+	SessionUpdate  = "session.update"
+	RoomRead       = "room.read"
+	RoomManage     = "room.manage"
+	InvitationRead = "invitation.read"
 )
 
 // Grant is one person's permissions on one event. It is loaded from

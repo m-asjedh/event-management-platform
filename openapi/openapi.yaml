@@ -371,6 +371,61 @@ paths:
         "500":
           $ref: "#/components/responses/Internal"
 
+  /events/{eventId}/invitations:
+    get:
+      operationId: listEventInvitations
+      summary: List invitations of one event
+      description: |
+        Keyset on `id` (uuidv7, time-ordered). No offset. Index is
+        invitations_event_id_id_idx on (event_id, id). ADR 0004.
+
+        Needs invitation.read. Grant first, same as GET /events/{id}: not a
+        member / no invitation.read is FORBIDDEN whether the event exists or
+        not. Attendees cannot page invitations.
+
+        Invitee email uses the same Grant.Can as PresentEvent: omitted when
+        the grant lacks user.email.read. Not sent as null — Go omitempty.
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Opaque. From nextCursor of the previous page. Same encoding as GET /events.
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        "200":
+          description: One page of invitations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvitationPage"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/Internal"
+
   /sessions/{id}:
     patch:
       operationId: patchSession
@@ -790,3 +845,45 @@ components:
         capacity:
           type: integer
           minimum: 1
+
+    Invitation:
+      type: object
+      additionalProperties: false
+      required: [id, eventId, role, status]
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventId:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+          description: |
+            Invitee email. Omitted when the grant lacks user.email.read.
+            Not sent as null — Go omitempty drops an empty string.
+        role:
+          type: string
+          enum: [admin, contributor, attendee]
+        status:
+          type: string
+          enum: [pending, accepted, declined, revoked]
+        invitedBy:
+          type: ["string", "null"]
+        userId:
+          type: ["string", "null"]
+          description: Set when the invitee has an account (accepted).
+
+    InvitationPage:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Invitation"
+        nextCursor:
+          type: string
+          description: Opaque. Omit when this is the last page. Same encoding as GET /events.
