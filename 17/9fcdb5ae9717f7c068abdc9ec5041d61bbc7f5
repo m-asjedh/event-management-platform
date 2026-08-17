@@ -1,0 +1,43 @@
+backend/.dockerignore
+  s_a0ce08ea017ba1::t_975ae513230742 1-6
+Makefile
+  s_a0ce08ea017ba1::t_2fe96a54e77629 10,12,14-15,25-37
+  s_a0ce08ea017ba1::t_a12f77b19c5128 38
+backend/go.mod
+  s_a0ce08ea017ba1::t_d5f87bd53952be 3
+  s_a0ce08ea017ba1::t_f30cc015effe12 6-10,13
+  s_a0ce08ea017ba1::t_bd54dda331489e 1-2,4-5,11-12,14-19
+docker-compose.yml
+  s_a0ce08ea017ba1::t_207158e9e088ff 27-44
+.env.example
+  s_a0ce08ea017ba1::t_3ec878b1c56028 14-15
+backend/cmd/migrate/main.go
+  s_a0ce08ea017ba1::t_507592e0b776cb 1-119
+backend/Dockerfile
+  s_a0ce08ea017ba1::t_5f1a6af520c440 1-26
+backend/migrations/embed.go
+  s_a0ce08ea017ba1::t_2f66981771a05b 1-11
+backend/go.sum
+  s_a0ce08ea017ba1::t_e8430fa3af0f59 1-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "179fcdb5ae9717f7c068abdc9ec5041d61bbc7f5",
+  "prompts": {},
+  "humans": {
+    "h_3283e2518520ac": {
+      "author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
