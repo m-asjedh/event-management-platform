@@ -1,0 +1,110 @@
+.env.example
+  s_a0ce08ea017ba1::t_5012212588f4eb 15-22
+Makefile
+  s_a0ce08ea017ba1::t_1b21c99f35ad73 10
+  s_a0ce08ea017ba1::t_ba57b250a96e9a 79-95
+frontend/.gitignore
+  s_a0ce08ea017ba1::t_e67b3485c33a64 1-24
+frontend/src/generated/api.ts
+  s_a0ce08ea017ba1::t_d7e01904c81284 1-835
+frontend/src/main.tsx
+  s_a0ce08ea017ba1::t_cab11a8ed087c9 1-25,27-29
+  s_a0ce08ea017ba1::t_e67b3485c33a64 26,30-31
+frontend/src/components/ui/button.tsx
+  s_a0ce08ea017ba1::t_c7dda4bac38624 1-41
+.dockerignore
+  s_a0ce08ea017ba1::t_3eb00a8d934c93 1-8
+frontend/src/assets/vite.svg
+  s_a0ce08ea017ba1::t_e67b3485c33a64 1
+docker-compose.yml
+  s_a0ce08ea017ba1::t_9beb88193e4510 207
+  s_a0ce08ea017ba1::t_eca374ce1f066e 96-136
+.github/workflows/ci.yml
+  s_a0ce08ea017ba1::t_96ff9927879474 28-34
+frontend/src/vite-env.d.ts
+  s_a0ce08ea017ba1::t_fb0f6079983f47 1-9
+frontend/src/assets/react.svg
+  s_a0ce08ea017ba1::t_e67b3485c33a64 1
+frontend/.npmrc
+  s_a0ce08ea017ba1::t_705962773a43d2 1
+frontend/src/routes/index.tsx
+  s_a0ce08ea017ba1::t_db347b36a5f8d8 13-23
+  s_a0ce08ea017ba1::t_b2ceb186b89711 24-25
+  s_a0ce08ea017ba1::t_451e9f756b3342 10
+  s_a0ce08ea017ba1::t_d8f3d44839800b 1-9,11-12,26-43
+frontend/public/icons.svg
+  s_a0ce08ea017ba1::t_e67b3485c33a64 1-24
+frontend/src/index.css
+  s_a0ce08ea017ba1::t_e67b3485c33a64 2,5
+  s_a0ce08ea017ba1::t_8298684753e871 1,3-4
+frontend/.env.example
+  s_a0ce08ea017ba1::t_6512c3a8278912 1-7
+frontend/components.json
+  s_a0ce08ea017ba1::t_2c3af3b769e6be 1-20
+frontend/src/routeTree.gen.ts
+  s_a0ce08ea017ba1::t_d7e01904c81284 1-59
+frontend/index.html
+  s_a0ce08ea017ba1::t_969bafe0fbbc8e 7
+  s_a0ce08ea017ba1::t_e67b3485c33a64 1-6,8-13
+frontend/package.json
+  s_a0ce08ea017ba1::t_ca04b2d44a82e7 14-19,21-22
+  s_a0ce08ea017ba1::t_76e4298036b258 25-26,31,33
+  s_a0ce08ea017ba1::t_c42860d694407a 9
+  s_a0ce08ea017ba1::t_e67b3485c33a64 1-8,10-13,20,23-24,27-30,32,34-37
+frontend/tsconfig.node.json
+  s_a0ce08ea017ba1::t_e67b3485c33a64 1-23
+frontend/src/lib/api/client.ts
+  s_a0ce08ea017ba1::t_e99dd3a317bc53 1-13
+TRADEOFFS.md
+  s_a0ce08ea017ba1::t_a551b0ff120c8e 78-84,89-90
+README.md
+  s_a0ce08ea017ba1::t_a579fbdbc7a1e9 64-65
+  s_a0ce08ea017ba1::t_252f33f092e848 13-14,23-29
+  s_a0ce08ea017ba1::t_907b7cc3a4ea77 60-63,66-71
+  s_a0ce08ea017ba1::t_cb188c3741db5c 30
+frontend/.oxlintrc.json
+  s_a0ce08ea017ba1::t_e67b3485c33a64 1-8
+frontend/public/favicon.svg
+  s_a0ce08ea017ba1::t_e67b3485c33a64 1
+frontend/src/lib/query/keys.ts
+  s_a0ce08ea017ba1::t_5cfd2606d63543 1-3
+frontend/tsconfig.app.json
+  s_a0ce08ea017ba1::t_e67b3485c33a64 1-22,30-32
+  s_a0ce08ea017ba1::t_2f19d009edbf80 24
+  s_a0ce08ea017ba1::t_da6b5ea7a62f2b 23,25-29
+frontend/README.md
+  s_a0ce08ea017ba1::t_e67b3485c33a64 2,4,6,16,18,21-22
+  s_a0ce08ea017ba1::t_73a9efb6713d93 7-10,12,14-15
+  s_a0ce08ea017ba1::t_b874e749fc8f7d 1,3,5,11,13,17,19-20,23-24
+frontend/tsconfig.json
+  s_a0ce08ea017ba1::t_e67b3485c33a64 1-7
+frontend/src/lib/query/health.ts
+  s_a0ce08ea017ba1::t_f5ef4d6b54bacf 1-12
+frontend/vite.config.ts
+  s_a0ce08ea017ba1::t_d42c2c34eaea3e 1-2,4-13,15-36
+  s_a0ce08ea017ba1::t_e67b3485c33a64 3,14,37
+frontend/Dockerfile
+  s_a0ce08ea017ba1::t_5758a2141ed937 1-11
+frontend/src/routes/__root.tsx
+  s_a0ce08ea017ba1::t_7b526462ceb583 1-6
+frontend/src/lib/utils.ts
+  s_a0ce08ea017ba1::t_e92a0b43e92765 1-6
+frontend/package-lock.json
+  s_a0ce08ea017ba1::t_3559c14bff0f25 1-3193
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "eba9d0cf04cf2e379dea53a63b2595ab437305d0",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
