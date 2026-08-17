@@ -10,12 +10,13 @@ import (
 	"os"
 	"time"
 
-	"github.com/jmoiron/sqlx"
 	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/jmoiron/sqlx"
 
 	"github.com/m-asjedh/event-management-platform/backend/internal/authz"
 	"github.com/m-asjedh/event-management-platform/backend/internal/events"
 	"github.com/m-asjedh/event-management-platform/backend/internal/identity"
+	"github.com/m-asjedh/event-management-platform/backend/internal/sessions"
 )
 
 func main() {
@@ -49,6 +50,7 @@ func run() error {
 	users := identity.NewStore(db)
 	grants := authz.NewStore(db)
 	eventStore := events.NewStore(db)
+	sessionStore := sessions.NewStore(db)
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, _ *http.Request) {
@@ -69,6 +71,7 @@ func run() error {
 		})
 	})))
 	mux.Handle("GET /events/{id}", users.Require(secret)(events.Show(eventStore, grants)))
+	mux.Handle("PATCH /sessions/{id}", users.Require(secret)(sessions.Patch(sessionStore, grants)))
 
 	addr := ":" + getenv("API_PORT", "8080")
 	log.Printf("api listening on %s", addr)

@@ -84,6 +84,18 @@ func WallClock(instant time.Time, zone string) (time.Time, error) {
 	return instant.In(loc), nil
 }
 
+const localLayout = "2006-01-02T15:04:05"
+
+// ParseLocal turns a civil wall clock with no offset into an instant in zone.
+// It calls Instant; it does not use time.Date / ParseInLocation as the answer.
+func ParseLocal(zone, wall string) (time.Time, error) {
+	t, err := time.Parse(localLayout, wall)
+	if err != nil {
+		return time.Time{}, fmt.Errorf("local time: %w", err)
+	}
+	return Instant(zone, t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second())
+}
+
 func sameWall(t time.Time, year int, month time.Month, day, hour, minute, second int) bool {
 	y, m, d := t.Date()
 	h, min, sec := t.Clock()

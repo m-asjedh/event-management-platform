@@ -10,6 +10,9 @@ info:
     role-dependent. The same Grant.Can check that allows the request also
     decides which fields are present.
 
+    PATCH /sessions/{id} is the first write. ROOM_CONFLICT and STALE_VERSION
+    are both HTTP 409; the client branches on code, not status.
+
 servers:
   - url: http://localhost:8080
 
@@ -116,6 +119,109 @@ paths:
         "500":
           $ref: "#/components/responses/Internal"
 
+  /sessions/{id}:
+    patch:
+      operationId: patchSession
+      summary: Update a session's time and/or room
+      description: |
+        Partial update. A missing field is left unchanged. `roomId: null`
+        unschedules the session (no room). `title`, `description`, `startsAt`,
+        and `endsAt` are not nullable — omit them to leave them.
+
+        `version` is required. The UPDATE matches that version and then
+        increments. A mismatch is STALE_VERSION, not a silent overwrite.
+
+        `startsAt` / `endsAt` are local wall-clock times in the event's IANA
+        zone, with no offset. The server parses them with tz.Instant.
+        A spring-forward gap or a fall-back fold is VALIDATION_ERROR.
+
+        Room double-booking is the database exclusion constraint, not a
+        SELECT-then-UPDATE. The constraint error is mapped to ROOM_CONFLICT.
+
+        Needs session.update on the event.
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SessionPatch"
+            examples:
+              reschedule:
+                summary: Move time, keep the room
+                value:
+                  version: 1
+                  startsAt: "2026-03-08T12:00:00"
+                  endsAt: "2026-03-08T13:00:00"
+              unschedule:
+                summary: Clear the room
+                value:
+                  version: 1
+                  roomId: null
+              titleOnly:
+                summary: Missing fields are left unchanged
+                value:
+                  version: 1
+                  title: Keynote
+      responses:
+        "200":
+          description: Updated session, including the new version
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Session"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          description: |
+            Either the room is taken or the version is stale. Same HTTP
+            status. Distinct `code`.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                roomConflict:
+                  summary: ROOM_CONFLICT — exclusion constraint rejected the write
+                  value:
+                    code: ROOM_CONFLICT
+                    reason: room is taken
+                    conflict:
+                      conflictingSessionId: "019b76da-d46d-7000-8000-00002c6d0000"
+                      conflictingTitle: Talk A2
+                staleVersion:
+                  summary: STALE_VERSION — includes current state, no second GET
+                  value:
+                    code: STALE_VERSION
+                    reason: version has changed
+                    conflict:
+                      currentVersion: 2
+                      currentState:
+                        id: "019b76da-d46d-7000-8000-00002c6d0001"
+                        eventId: "019b76da-d44e-7000-8000-00002c4e0000"
+                        roomId: "019b76da-d46d-7000-8000-00002c6d0002"
+                        title: Talk A1
+                        description: ""
+                        startsAt: "2026-03-08T13:00:00Z"
+                        endsAt: "2026-03-08T14:00:00Z"
+                        version: 2
+        "500":
+          $ref: "#/components/responses/Internal"
+
 components:
   securitySchemes:
     sessionCookie:
@@ -135,7 +241,7 @@ components:
             code: UNAUTHENTICATED
             reason: not signed in
     Forbidden:
-      description: Signed in, but not a member of this event, or lacking event.read
+      description: Signed in, but not a member, or lacking the permission
       content:
         application/json:
           schema:
@@ -144,7 +250,7 @@ components:
             code: FORBIDDEN
             reason: not allowed
     NotFound:
-      description: Event id does not exist
+      description: Event or session id does not exist
       content:
         application/json:
           schema:
@@ -152,6 +258,20 @@ components:
           example:
             code: NOT_FOUND
             reason: event not found
+    ValidationError:
+      description: |
+        Bad input. Includes a nonexistent or ambiguous local time from
+        tz.Instant. Offending fields are in fieldErrors.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            code: VALIDATION_ERROR
+            reason: nonexistent local time
+            fieldErrors:
+              - field: startsAt
+                reason: nonexistent local time
     Internal:
       description: Unexpected failure
       content:
@@ -170,14 +290,47 @@ components:
       properties:
         code:
           type: string
-          description: Machine-readable code the server actually returns today.
+          description: Machine-readable. The client branches on this, never on reason.
           enum:
             - UNAUTHENTICATED
             - FORBIDDEN
             - NOT_FOUND
             - INTERNAL
+            - VALIDATION_ERROR
+            - ROOM_CONFLICT
+            - STALE_VERSION
         reason:
           type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: "#/components/schemas/FieldError"
+        conflict:
+          $ref: "#/components/schemas/Conflict"
+
+    FieldError:
+      type: object
+      additionalProperties: false
+      required: [field, reason]
+      properties:
+        field:
+          type: string
+        reason:
+          type: string
+
+    Conflict:
+      type: object
+      additionalProperties: false
+      properties:
+        conflictingSessionId:
+          type: string
+          format: uuid
+        conflictingTitle:
+          type: string
+        currentVersion:
+          type: integer
+        currentState:
+          $ref: "#/components/schemas/Session"
 
     Health:
       type: object
@@ -249,3 +402,60 @@ components:
           description: |
             Omitted when the grant lacks member.read (attendee). Not sent as
             null — Go omitempty drops a nil slice.
+
+    Session:
+      type: object
+      additionalProperties: false
+      required: [id, eventId, title, description, startsAt, endsAt, version]
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventId:
+          type: string
+          format: uuid
+        roomId:
+          type: ["string", "null"]
+          format: uuid
+          description: Null when the session has no room.
+        title:
+          type: string
+        description:
+          type: string
+        startsAt:
+          type: string
+          format: date-time
+          description: Instant, RFC 3339. Local wall clock is this plus the event zone.
+        endsAt:
+          type: string
+          format: date-time
+        version:
+          type: integer
+
+    SessionPatch:
+      type: object
+      additionalProperties: false
+      required: [version]
+      properties:
+        version:
+          type: integer
+          description: Version the client last read. Must match or the write is STALE_VERSION.
+        title:
+          type: string
+          description: Omit to leave unchanged. Not nullable.
+        description:
+          type: string
+        roomId:
+          type: ["string", "null"]
+          format: uuid
+          description: |
+            Omit to leave unchanged. JSON null clears the room. A uuid assigns
+            a room of this event.
+        startsAt:
+          type: string
+          description: |
+            Local wall-clock in the event's IANA zone, no offset
+            (`2026-03-08T09:00:00`). Parsed by tz.Instant.
+        endsAt:
+          type: string
+          description: Same shape as startsAt.
