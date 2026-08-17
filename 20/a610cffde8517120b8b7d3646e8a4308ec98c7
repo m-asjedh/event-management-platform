@@ -1,0 +1,79 @@
+AI-WORKFLOW.md
+  s_a0ce08ea017ba1::t_50e26c0fa24317 160
+  s_a0ce08ea017ba1::t_4d46fe3298a014 136-150
+backend/internal/events/store.go
+  s_a0ce08ea017ba1::t_b373085c82da2f 47-102
+backend/internal/sessions/http.go
+  s_a0ce08ea017ba1::t_b742f6ae27e5aa 218,224-235
+  s_a0ce08ea017ba1::t_d2d115989dc4dd 58,60,68,78-84
+  s_a0ce08ea017ba1::t_aff53147d6a718 85-86,207-217,219-223,236-260,264-266,268-269,271,278-280,282-352
+  s_a0ce08ea017ba1::t_d8479e767ffd8c 261-263,267,270,272-277,281
+  s_a0ce08ea017ba1::t_d8bfdfd6d8700a 10
+  s_a0ce08ea017ba1::t_fd26d112f1c57c 87
+backend/internal/rooms/http.go
+  s_a0ce08ea017ba1::t_2b3cbcbf1eb4d7 73,79-90
+  s_a0ce08ea017ba1::t_c047c156492d75 30,36-47
+  s_a0ce08ea017ba1::t_d4185524612248 1-29,31-35,48-72,74-78,91-122
+backend/internal/authz/present_test.go
+  s_a0ce08ea017ba1::t_e337168f5ed138 81
+  s_a0ce08ea017ba1::t_71247f11f862c5 11,17-18
+backend/internal/events/cursor.go
+  s_a0ce08ea017ba1::t_bf69330a582a1d 1-18
+backend/internal/rooms/store.go
+  s_a0ce08ea017ba1::t_7a69022f47ced1 1-51
+backend/internal/authz/grant.go
+  s_a0ce08ea017ba1::t_70d5ab75a4f983 7-8,10-11
+TRADEOFFS.md
+  s_a0ce08ea017ba1::t_a3aecb08d70906 28-34
+  s_a0ce08ea017ba1::t_ecff16ac12a269 71-73
+backend/internal/sessions/patch_test.go
+  s_a0ce08ea017ba1::t_52184aa9b0a8a2 253-266
+openapi/openapi.yaml
+  s_a0ce08ea017ba1::t_98fe81742deb78 100-103
+  s_a0ce08ea017ba1::t_0b1eadc7f4e843 717-792
+  s_a0ce08ea017ba1::t_da69333ce89245 136-139
+  s_a0ce08ea017ba1::t_3b1d57a34f9eca 206-209
+  s_a0ce08ea017ba1::t_664adc3c341be2 300-302
+  s_a0ce08ea017ba1::t_8ea388369aa2c2 56-99,104-128
+  s_a0ce08ea017ba1::t_df03cc08a04cb4 248-250
+  s_a0ce08ea017ba1::t_aca15f2f152ef2 393-396
+  s_a0ce08ea017ba1::t_19730c0ea347eb 337-340
+  s_a0ce08ea017ba1::t_3029c6d932d623 199-205,210-247,251-299,303-336,341-373
+backend/internal/sessions/store.go
+  s_a0ce08ea017ba1::t_3de7612e826b42 59-67
+  s_a0ce08ea017ba1::t_3e575a144a3b8f 131-165
+backend/internal/events/http_test.go
+  s_a0ce08ea017ba1::t_9f2b980ede310e 1-234
+backend/internal/sessions/list_create_test.go
+  s_a0ce08ea017ba1::t_aacb9498a458b7 129-131,138-144,146-149,158-165
+  s_a0ce08ea017ba1::t_c3cf8c991a374f 9
+  s_a0ce08ea017ba1::t_3d47f2d189e7fd 1-8,10-128,166-209
+  s_a0ce08ea017ba1::t_2d1afb125b9954 132-137,145,150-157
+backend/internal/rooms/http_test.go
+  s_a0ce08ea017ba1::t_de723ff94e6170 1-117,137-171
+  s_a0ce08ea017ba1::t_c7df4a3e4f8fb1 118-136
+backend/cmd/api/main.go
+  s_a0ce08ea017ba1::t_c5a90add6d89f9 19
+  s_a0ce08ea017ba1::t_b71800a62d0f84 55
+  s_a0ce08ea017ba1::t_09009ebb99870b 75-76,78-81
+backend/internal/events/http.go
+  s_a0ce08ea017ba1::t_774ccc3e25e4c3 72-119,123-212
+  s_a0ce08ea017ba1::t_56b1d6bb39c73c 120-122
+  s_a0ce08ea017ba1::t_a949ec06d3c359 7,9,12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "20a610cffde8517120b8b7d3646e8a4308ec98c7",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
