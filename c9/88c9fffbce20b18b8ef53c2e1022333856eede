@@ -1,0 +1,41 @@
+backend/internal/sessions/store.go
+  s_a0ce08ea017ba1::t_14fba04f7e1db4 1-92,94-121
+  s_a0ce08ea017ba1::t_f3222a7fe827c9 93
+backend/internal/authz/grant.go
+  s_a0ce08ea017ba1::t_b8cbbd6daf3f8a 4-7
+backend/internal/apierr/error.go
+  s_a0ce08ea017ba1::t_9170ed13645019 1-43
+backend/internal/sessions/patch_test.go
+  s_a0ce08ea017ba1::t_dfda93a5159934 1-299
+backend/internal/tz/tz.go
+  s_a0ce08ea017ba1::t_abd5d3c3d081fc 87-98
+backend/internal/sessions/http.go
+  s_a0ce08ea017ba1::t_972d57099e91e5 1-195
+backend/cmd/api/main.go
+  s_a0ce08ea017ba1::t_e936aec69d27c5 19
+  s_a0ce08ea017ba1::t_2ef7381f921e41 53
+  s_a0ce08ea017ba1::t_a996f108457982 74
+  s_a0ce08ea017ba1::t_985740769fac97 14
+openapi/openapi.yaml
+  s_a0ce08ea017ba1::t_1b2d8468dbe8bf 405-461
+  s_a0ce08ea017ba1::t_ce7dfd112628f5 13-15
+  s_a0ce08ea017ba1::t_35799d334d1d53 293,299-301,304-333
+  s_a0ce08ea017ba1::t_e447373f1f5e2a 122-224
+  s_a0ce08ea017ba1::t_1325606ac14750 244,253,261-274
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "c988c9fffbce20b18b8ef53c2e1022333856eede",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
