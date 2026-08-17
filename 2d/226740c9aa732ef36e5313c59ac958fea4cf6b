@@ -1,0 +1,34 @@
+.gitignore
+  s_a0ce08ea017ba1::t_5851a904a2d141 1-41
+AI-WORKFLOW.md
+  s_a0ce08ea017ba1::t_60ea04f1613222 2,4-6,8,17,19-24,26-30,32-34,36,40,42-43,45
+  h_3283e2518520ac 1,9-16,25,31,41,44,46-47,49
+  s_a0ce08ea017ba1::t_13eabfe08e9808 3,7,50
+  s_a0ce08ea017ba1::t_60aa95a9dbeed9 18,37-39
+  s_a0ce08ea017ba1::t_d60ed5db8022f5 35,48
+README.md
+  s_a0ce08ea017ba1::t_d66ea8c6a22fa5 5,7,9,11,17,19
+  s_a0ce08ea017ba1::t_8e17c2ecff08ba 3
+  s_a0ce08ea017ba1::t_51417cb761fd90 1-2,4,6,8,10,12-16,18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "2d226740c9aa732ef36e5313c59ac958fea4cf6b",
+  "prompts": {},
+  "humans": {
+    "h_3283e2518520ac": {
+      "author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
