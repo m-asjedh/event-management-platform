@@ -73,6 +73,8 @@ That schedule shows rooms across and time down, in the event's IANA zone. Drag a
 room or time. A rejected write rolls the block back (or to `currentState` on `STALE_VERSION`); the
 grid always matches the server.
 
+Invitations are at `/events/$eventId/invitations`: keyset pages, virtualized rows, fetch on scroll.
+
 ```bash
 make gen-api           # regenerate types after a spec change
 make check-generated   # CI: fail if committed types are stale

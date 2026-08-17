@@ -101,13 +101,14 @@ The database still rejects room double-booking on write; the view has to be able
 positioned grid and for tests. Drop computes room + snapped time; the mutation is the source of
 truth, not the drag library.
 
-**Rejection recovery.** Both room clash and stale version are HTTP 409; the client branches on
-`code`. `ROOM_CONFLICT` restores the snapshot. `STALE_VERSION` writes `conflict.currentState` into
-the cache — not the optimistic slot, not a blank, not a silent overwrite.
+**Invitations list.** `useInfiniteQuery` pages on the opaque `nextCursor` (never parsed, never
+an offset). `@tanstack/react-virtual` keeps only the visible rows in the DOM. Fetch-on-scroll
+loads the next page; the last page (`nextCursor` absent) stops cleanly. Shareable URL position
+is not wired yet.
 
 ---
 
 ## What two more weeks would buy
 
-The next work that uses what is already here: the write-capable agent UI with an approval gate.
-I am not pre-writing that here.
+The next work that uses what is already here: putting the invitation cursor in the URL, and the
+write-capable agent UI with an approval gate. I am not pre-writing those here.

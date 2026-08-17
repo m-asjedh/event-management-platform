@@ -4,4 +4,5 @@ export const queryKeys = {
   event: (id: string) => ["events", id] as const,
   rooms: (eventId: string) => ["events", eventId, "rooms"] as const,
   sessions: (eventId: string) => ["events", eventId, "sessions"] as const,
+  invitations: (eventId: string) => ["events", eventId, "invitations"] as const,
 }

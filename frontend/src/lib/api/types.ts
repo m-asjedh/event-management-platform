@@ -13,3 +13,5 @@ export type RoomList =
   paths["/events/{eventId}/rooms"]["get"]["responses"]["200"]["content"]["application/json"]
 export type PatchedSession =
   paths["/sessions/{id}"]["patch"]["responses"]["200"]["content"]["application/json"]
+export type Invitation = components["schemas"]["Invitation"]
+export type InvitationPage = components["schemas"]["InvitationPage"]
