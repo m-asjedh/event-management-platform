@@ -1,0 +1,35 @@
+backend/internal/tz/tz.go
+  s_a0ce08ea017ba1::t_41028fc83006af 1-91
+backend/internal/tz/tz_test.go
+  s_a0ce08ea017ba1::t_1a2c6eabfcc50b 1-168
+backend/Dockerfile
+  s_a0ce08ea017ba1::t_a4dfd7e1a01523 17-21
+AI-WORKFLOW.md
+  s_a0ce08ea017ba1::t_20f82e1cd1d4c9 25-34,40-43,53-90,101
+Makefile
+  s_a0ce08ea017ba1::t_dde2f3c63b71c6 10
+  s_a0ce08ea017ba1::t_c75df00b3e83c7 48-51
+docker-compose.yml
+  s_a0ce08ea017ba1::t_861f52e7205a72 55-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "84465d4ed8907ccfab2d47aede64f3b0b2a5617a",
+  "prompts": {},
+  "humans": {
+    "h_3283e2518520ac": {
+      "author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
