@@ -1,0 +1,33 @@
+docker-compose.yml
+  s_a0ce08ea017ba1::t_63546b8a86c9b2 20-21
+  s_a0ce08ea017ba1::t_17ad0634ee3914 1-5,7,9-19,22-28
+  s_a0ce08ea017ba1::t_eddc6a6017c591 6,8
+.env.example
+  s_a0ce08ea017ba1::t_50c7803d96ca43 1-3,8,10,12-13
+  s_a0ce08ea017ba1::t_076ba3fd546afb 4-7,9,11,14
+Makefile
+  s_a0ce08ea017ba1::t_f250ef3ca6e1a4 1-6,10,19-22
+  s_a0ce08ea017ba1::t_786a36fa256b3a 7-8
+  s_a0ce08ea017ba1::t_b672b773504f52 9,11-18,23-31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "1d02871834bf604007e3126366fb9f78326d5fd7",
+  "prompts": {},
+  "humans": {
+    "h_3283e2518520ac": {
+      "author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
