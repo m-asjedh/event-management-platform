@@ -1,0 +1,40 @@
+backend/internal/authz/present.go
+  s_a0ce08ea017ba1::t_138ccd66a85d44 1-57
+backend/internal/events/http.go
+  s_a0ce08ea017ba1::t_e1c5231bc1affd 1-68
+backend/cmd/api/main.go
+  s_a0ce08ea017ba1::t_78d00d634850ee 16-17
+  s_a0ce08ea017ba1::t_5d4d287020be47 49-51,58,71
+backend/internal/authz/store.go
+  s_a0ce08ea017ba1::t_591a48afa818ab 1-63
+backend/internal/events/store.go
+  s_a0ce08ea017ba1::t_6f54a4fef400a3 1-46
+backend/internal/authz/grant_test.go
+  s_a0ce08ea017ba1::t_9dd729673bf143 1-18
+backend/internal/authz/grant.go
+  s_a0ce08ea017ba1::t_0a1d2baca407e7 1-30
+backend/internal/authz/present_test.go
+  s_a0ce08ea017ba1::t_7e35a90ef6ec92 47
+  s_a0ce08ea017ba1::t_dba3c1efc35a27 1-46,48-89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "38aad9f8211085e2d460cad6fff04ab7eefd9bd7",
+  "prompts": {},
+  "humans": {
+    "h_3283e2518520ac": {
+      "author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
