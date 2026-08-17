@@ -250,6 +250,20 @@ func TestForbiddenAttendee(t *testing.T) {
 	}
 }
 
+func TestForbiddenAttendeeNonexistentSession(t *testing.T) {
+	f := setup(t)
+	rec := f.patch(t, f.attend, "01999999-9999-7000-8000-000000000000", map[string]any{
+		"version": 1,
+		"title":   "Nope",
+	})
+	if rec.Code != http.StatusForbidden {
+		t.Fatalf("status %d body=%s", rec.Code, rec.Body.String())
+	}
+	if decodeErr(t, rec)["code"] != "FORBIDDEN" {
+		t.Fatalf("body=%s", rec.Body.String())
+	}
+}
+
 func TestSpringForwardLocalTime(t *testing.T) {
 	f := setup(t)
 	rec := f.patch(t, f.admin, f.talkA1.ID, map[string]any{

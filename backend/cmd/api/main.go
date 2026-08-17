@@ -16,6 +16,7 @@ import (
 	"github.com/m-asjedh/event-management-platform/backend/internal/authz"
 	"github.com/m-asjedh/event-management-platform/backend/internal/events"
 	"github.com/m-asjedh/event-management-platform/backend/internal/identity"
+	"github.com/m-asjedh/event-management-platform/backend/internal/rooms"
 	"github.com/m-asjedh/event-management-platform/backend/internal/sessions"
 )
 
@@ -51,6 +52,7 @@ func run() error {
 	grants := authz.NewStore(db)
 	eventStore := events.NewStore(db)
 	sessionStore := sessions.NewStore(db)
+	roomStore := rooms.NewStore(db)
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, _ *http.Request) {
@@ -70,7 +72,13 @@ func run() error {
 			"email": user.Email,
 		})
 	})))
+	mux.Handle("GET /events", users.Require(secret)(events.List(eventStore, grants)))
+	mux.Handle("POST /events", users.Require(secret)(events.Create(eventStore)))
 	mux.Handle("GET /events/{id}", users.Require(secret)(events.Show(eventStore, grants)))
+	mux.Handle("GET /events/{eventId}/sessions", users.Require(secret)(sessions.List(sessionStore, eventStore, grants)))
+	mux.Handle("POST /events/{eventId}/sessions", users.Require(secret)(sessions.Create(sessionStore, eventStore, grants)))
+	mux.Handle("GET /events/{eventId}/rooms", users.Require(secret)(rooms.List(roomStore, eventStore, grants)))
+	mux.Handle("POST /events/{eventId}/rooms", users.Require(secret)(rooms.Create(roomStore, eventStore, grants)))
 	mux.Handle("PATCH /sessions/{id}", users.Require(secret)(sessions.Patch(sessionStore, grants)))
 
 	addr := ":" + getenv("API_PORT", "8080")

@@ -133,6 +133,21 @@ Caught by:
 
 ---
 
+## Where the AI surfaced a decision
+
+Not a bug. Nested create/list first loaded the event (404 if missing) and then asked `Grant.Can`.
+`GET /events/{id}` already did the opposite: grant first, so a missing event and a forbidden event
+both look like `FORBIDDEN`.
+
+404-before-grant tells an unauthorized caller whether the event exists (404 vs 403). That is an
+information leak. It looked correct as REST ("the parent must exist"), which is why it is worth
+recording: the safer rule is the one `Show` already had.
+
+I aligned the nested routes to grant-first. `TestUnknownEventIsForbidden` asserts a well-formed
+unknown event id is `FORBIDDEN`, not `NOT_FOUND`.
+
+---
+
 ## Log
 
 
@@ -142,3 +157,4 @@ Caught by:
 | 2026-08-17 | Seed via COPY (~800ms, 50k invitations). Shared scrypt hash is a seed-speed choice. uuidv7 minted in Go so COPY has parent IDs and reruns match. Invitations keyset EXPLAIN captured in docs/postgres-18.md. |
 | 2026-08-17 | DST edge: `time.Date` turns 02:30 on 2026-03-08 NY into 01:30 EST with no error. `internal/tz.Instant` refuses gaps and folds. Three tests in `tz_test.go`. Seed rows were fine (09:00–16:00). |
 | 2026-08-17 | AI-WORKFLOW: ADR drafts had put back the speaker exclusion and a `created_at` keyset index. TRADEOFFS.md is the cuts that already exist, not the rest of the track. |
+| 2026-08-17 | Nested CRUD listed events before the grant (404 vs 403 leaked existence). Aligned to `Show`: grant first. Event create stays auth-only; no `event.create` row. |

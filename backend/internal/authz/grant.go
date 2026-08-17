@@ -4,7 +4,11 @@ const (
 	EventRead     = "event.read"
 	MemberRead    = "member.read"
 	UserEmailRead = "user.email.read"
+	SessionRead   = "session.read"
+	SessionCreate = "session.create"
 	SessionUpdate = "session.update"
+	RoomRead      = "room.read"
+	RoomManage    = "room.manage"
 )
 
 // Grant is one person's permissions on one event. It is loaded from

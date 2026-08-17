@@ -8,14 +8,14 @@ import (
 )
 
 func attendeeGrant() Grant {
-	return NewGrant("attendee", []string{EventRead, "room.read", "session.read"})
+	return NewGrant("attendee", []string{EventRead, RoomRead, SessionRead})
 }
 
 func adminGrant() Grant {
 	return NewGrant("admin", []string{
 		EventRead, "event.update", "event.delete",
-		"room.read", "room.manage",
-		"session.read", "session.create", "session.update", "session.delete",
+		RoomRead, RoomManage,
+		SessionRead, SessionCreate, SessionUpdate, "session.delete",
 		MemberRead, "member.invite", "member.remove", "member.role.update",
 		"invitation.read", "invitation.create", "invitation.revoke",
 		UserEmailRead,
@@ -78,7 +78,7 @@ func TestAdminEventIncludesRosterEmails(t *testing.T) {
 func TestGrantDoesNotSwitchOnRoleName(t *testing.T) {
 	// A new role with the same rows as attendee must behave the same.
 	// If handlers switched on Role == "attendee", this would need a code change.
-	guest := NewGrant("guest", []string{EventRead, "room.read", "session.read"})
+	guest := NewGrant("guest", []string{EventRead, RoomRead, SessionRead})
 	view := PresentEvent(sampleEvent(), sampleRoster(), guest)
 	if view.Members != nil {
 		t.Fatalf("role with no member.read must not see the roster")

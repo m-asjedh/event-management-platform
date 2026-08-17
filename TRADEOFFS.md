@@ -25,6 +25,13 @@ account the reviewer does not have.
 drops the roster and emails unless those permissions are granted.
 `TestAttendeeEventOmitsRosterAndEmails` and `TestGrantDoesNotSwitchOnRoleName` are the proof.
 
+**Event creation.** Gated on authentication only, since per-event roles cannot predate the event.
+There is no `event.create` permission. The creator becomes admin of the new event.
+
+**Existence hiding.** Nested event routes check the grant before the event row, same as
+`GET /events/{id}`. A caller who is not a member gets `FORBIDDEN` whether the event exists or not.
+404-before-grant would leak existence (404 vs 403).
+
 **Room double-booking.** Partial GiST exclusion on `(room_id, tstzrange)`. Check-then-insert loses a
 race. PostgreSQL 18 `WITHOUT OVERLAPS` cannot be partial, so it would force every session to have a
 room. Drafts without a room stay legal.
@@ -38,8 +45,6 @@ already time-ordered. `EXPLAIN` is in `docs/postgres-18.md`.
 
 **Time.** `timestamptz` plus `events.time_zone`. `tz.Instant` refuses a spring-forward gap and a
 fall-back fold. Display uses the event's zone, proven under `TZ=Pacific/Auckland`.
-
-OpenAPI covers `GET /healthz`, `GET /me`, and `GET /events/{id}` only.
 
 ---
 
@@ -62,6 +67,9 @@ seed` stays fast. Demo password: `correct-horse-battery`. Not a production patte
 
 **Audit log table, session-dependency table, bulk-invite idempotency key.** Nothing writes them
 today. An unused column looks like abandoned work.
+
+**A shared helper for `23P01` → `ROOM_CONFLICT`.** `Apply` (PATCH) and `Insert` (POST) each translate
+the exclusion violation. Left duplicated so the PATCH store is not rewritten this pass.
 
 ---
 

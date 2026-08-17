@@ -56,6 +56,15 @@ func (s *Store) Get(ctx context.Context, id string) (Session, error) {
 	return row, err
 }
 
+func (s *Store) eventID(ctx context.Context, sessionID string) (string, error) {
+	var eventID string
+	err := s.db.GetContext(ctx, &eventID, `SELECT event_id FROM sessions WHERE id = $1`, sessionID)
+	if errors.Is(err, sql.ErrNoRows) {
+		return "", ErrNotFound
+	}
+	return eventID, err
+}
+
 func (s *Store) RoomBelongsToEvent(ctx context.Context, roomID, eventID string) (bool, error) {
 	var found string
 	err := s.db.GetContext(ctx, &found, `
@@ -118,4 +127,39 @@ func (s *Store) clash(ctx context.Context, next Session) (Clash, error) {
 		return Clash{}, nil
 	}
 	return c, err
+}
+
+func (s *Store) ListByEvent(ctx context.Context, eventID string) ([]Session, error) {
+	var rows []Session
+	err := s.db.SelectContext(ctx, &rows, `
+		SELECT s.id, s.event_id, s.room_id, s.title, s.description,
+		       s.starts_at, s.ends_at, s.version, e.time_zone
+		FROM   sessions s
+		JOIN   events   e ON e.id = s.event_id
+		WHERE  s.event_id = $1
+		ORDER  BY s.starts_at, s.id
+	`, eventID)
+	return rows, err
+}
+
+func (s *Store) Insert(ctx context.Context, in Session) (Session, Clash, error) {
+	var out Session
+	err := s.db.GetContext(ctx, &out, `
+		INSERT INTO sessions (event_id, room_id, title, description, starts_at, ends_at)
+		VALUES ($1, $2, $3, $4, $5, $6)
+		RETURNING id, event_id, room_id, title, description, starts_at, ends_at, version
+	`, in.EventID, in.RoomID, in.Title, in.Description, in.StartsAt, in.EndsAt)
+	if err == nil {
+		out.TimeZone = in.TimeZone
+		return out, Clash{}, nil
+	}
+	var pgErr *pgconn.PgError
+	if errors.As(err, &pgErr) && pgErr.Code == "23P01" { // exclusion_violation
+		if in.ID == "" {
+			in.ID = "00000000-0000-0000-0000-000000000000"
+		}
+		clash, _ := s.clash(ctx, in)
+		return Session{}, clash, ErrRoomConflict
+	}
+	return Session{}, Clash{}, err
 }

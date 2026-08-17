@@ -53,12 +53,89 @@ paths:
         "500":
           $ref: "#/components/responses/Internal"
 
+  /events:
+    get:
+      operationId: listEvents
+      summary: List events the caller can see
+      description: |
+        Keyset on `id` (uuidv7, time-ordered). No offset. Only events the
+        caller is a member of with event.read.
+
+        List items use PresentEvent with no roster loaded, so members and
+        emails are never in this response.
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Opaque. From nextCursor of the previous page.
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        "200":
+          description: One page of events
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventPage"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "500":
+          $ref: "#/components/responses/Internal"
+    post:
+      operationId: createEvent
+      summary: Create an event
+      description: |
+        Any signed-in user may create an event. Creation is gated on
+        authentication only: there is no event.create permission, because
+        per-event roles cannot predate the event. The creator is inserted as
+        admin on the new event.
+
+        timeZone must be a name in time_zones. startsAt and endsAt are local
+        wall-clock in that zone, parsed by tz.Instant.
+      security:
+        - sessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventCreate"
+      responses:
+        "201":
+          description: Created event. Roster omitted on this response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "500":
+          $ref: "#/components/responses/Internal"
+
   /events/{id}:
     get:
       operationId: getEvent
       summary: Get one event
       description: |
         Returns a single event the caller belongs to.
+
+        The grant is checked before the event row. A caller who is not a
+        member gets FORBIDDEN whether the event exists or not. NOT_FOUND is
+        only returned when the caller has a grant and the row is gone.
 
         The response body is role-dependent. PresentEvent uses the same
         Grant.Can check as the URL:
@@ -119,6 +196,181 @@ paths:
         "500":
           $ref: "#/components/responses/Internal"
 
+  /events/{eventId}/sessions:
+    get:
+      operationId: listEventSessions
+      summary: List sessions of one event
+      description: |
+        Ordered by startsAt, then id. Includes room, times, and version for
+        the schedule view. Needs session.read.
+
+        Grant first, same as GET /events/{id}: not a member is FORBIDDEN
+        whether the event exists or not. NOT_FOUND only if the caller has a
+        grant and the row is gone.
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Sessions in start order
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Session"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/Internal"
+    post:
+      operationId: createEventSession
+      summary: Create a session
+      description: |
+        startsAt and endsAt are local wall-clock in the event's zone, parsed
+        by tz.Instant. Room overlap is the exclusion constraint (23P01 →
+        ROOM_CONFLICT), not a check-then-insert. Needs session.create.
+
+        Grant first, same as GET /events/{id}: not a member is FORBIDDEN
+        whether the event exists or not.
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SessionCreate"
+      responses:
+        "201":
+          description: Created session, including version
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Session"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          description: ROOM_CONFLICT — exclusion constraint rejected the write
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: ROOM_CONFLICT
+                reason: room is taken
+                conflict:
+                  conflictingSessionId: "019b76da-d46d-7000-8000-00002c6d0000"
+                  conflictingTitle: Talk A2
+        "500":
+          $ref: "#/components/responses/Internal"
+
+  /events/{eventId}/rooms:
+    get:
+      operationId: listEventRooms
+      summary: List rooms of one event
+      description: |
+        Needs room.read. Grant first, same as GET /events/{id}: not a member
+        is FORBIDDEN whether the event exists or not.
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Rooms
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Room"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/Internal"
+    post:
+      operationId: createEventRoom
+      summary: Create a room
+      description: |
+        Needs room.manage. Name is unique per event. Grant first, same as
+        GET /events/{id}: not a member is FORBIDDEN whether the event exists
+        or not.
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoomCreate"
+      responses:
+        "201":
+          description: Created room
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Room"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/Internal"
+
   /sessions/{id}:
     patch:
       operationId: patchSession
@@ -138,7 +390,10 @@ paths:
         Room double-booking is the database exclusion constraint, not a
         SELECT-then-UPDATE. The constraint error is mapped to ROOM_CONFLICT.
 
-        Needs session.update on the event.
+        Needs session.update on the event. Grant first, same as GET
+        /events/{id}: a caller without session.update gets FORBIDDEN
+        whether the session exists or not. NOT_FOUND is only returned
+        when the caller has a grant and the row is gone.
       security:
         - sessionCookie: []
       parameters:
@@ -459,3 +714,79 @@ components:
         endsAt:
           type: string
           description: Same shape as startsAt.
+
+    EventPage:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Event"
+        nextCursor:
+          type: string
+          description: Opaque. Omit when this is the last page.
+
+    EventCreate:
+      type: object
+      additionalProperties: false
+      required: [name, timeZone, startsAt, endsAt]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        timeZone:
+          type: string
+          description: IANA name. Must exist in time_zones.
+        startsAt:
+          type: string
+          description: Local wall-clock in timeZone, no offset. tz.Instant.
+        endsAt:
+          type: string
+
+    SessionCreate:
+      type: object
+      additionalProperties: false
+      required: [title, startsAt, endsAt]
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        roomId:
+          type: ["string", "null"]
+          format: uuid
+        startsAt:
+          type: string
+          description: Local wall-clock in the event zone, no offset. tz.Instant.
+        endsAt:
+          type: string
+
+    Room:
+      type: object
+      additionalProperties: false
+      required: [id, eventId, name, capacity]
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        capacity:
+          type: integer
+
+    RoomCreate:
+      type: object
+      additionalProperties: false
+      required: [name, capacity]
+      properties:
+        name:
+          type: string
+        capacity:
+          type: integer
+          minimum: 1
