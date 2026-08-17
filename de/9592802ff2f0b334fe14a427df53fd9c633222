@@ -1,0 +1,47 @@
+TRADEOFFS.md
+  s_a0ce08ea017ba1::t_fa6d6c042eddd7 74-77,82-83
+backend/cmd/agent/main.go
+  s_a0ce08ea017ba1::t_3b0c0921195241 1-97
+docker-compose.yml
+  s_a0ce08ea017ba1::t_d2f448cb57c861 123-140
+backend/internal/agent/tools.go
+  s_a0ce08ea017ba1::t_bcce075174af2c 1-20
+backend/internal/agent/json.go
+  s_a0ce08ea017ba1::t_eeca778ac9f718 1-29
+backend/internal/agent/run.go
+  s_a0ce08ea017ba1::t_c8b195b6a21bd8 1-49
+backend/internal/agent/plan.go
+  s_a0ce08ea017ba1::t_8f53c74a151f7f 1-20,22,25-46,50-260,262-264
+  s_a0ce08ea017ba1::t_a293178696be51 21,23-24
+  s_a0ce08ea017ba1::t_842d8e6192588c 47-49
+  s_a0ce08ea017ba1::t_5d471a3712740b 261
+backend/internal/agent/scenarios_test.go
+  s_a0ce08ea017ba1::t_d9daf44fe4f332 1-207
+README.md
+  s_a0ce08ea017ba1::t_0a4f18dcade9a4 21-49
+backend/internal/agent/client.go
+  s_a0ce08ea017ba1::t_9a50e4762d3b63 1-103
+Makefile
+  s_a0ce08ea017ba1::t_59d0af295419fa 66-76,78
+  s_a0ce08ea017ba1::t_c692b612d044d7 77
+  s_a0ce08ea017ba1::t_d486e92925044b 10
+backend/internal/agent/auth.go
+  s_a0ce08ea017ba1::t_37464d33851eb3 7,40-43
+  s_a0ce08ea017ba1::t_a71befc9d63bf7 1-6,8-39,44-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "de9592802ff2f0b334fe14a427df53fd9c633222",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
