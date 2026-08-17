@@ -75,9 +75,16 @@ the exclusion violation. Left duplicated so the PATCH store is not rewritten thi
 No database, no extra key, no hosted model — a clean machine has no API key, and the three
 scenarios have to be deterministic in `make test`. Write access and a human-in-the-loop UI are later.
 
+**Frontend types.** TypeScript types come from `openapi/openapi.yaml` via `openapi-typescript`.
+Hand-written response interfaces are not allowed. `make check-generated` regenerates the file and
+fails if git is dirty. The UI is not part of `make up` — a Vite pull would risk the 5-minute budget.
+
+**Data loading (scaffold).** TanStack Router owns the URL. TanStack Query owns server state.
+The placeholder route warms the cache with `ensureQueryData`. Mutations are not built yet.
+
 ---
 
 ## What two more weeks would buy
 
-The next work that uses what is already here: the write-capable agent with an approval gate, and
-the frontend that makes that gate visible. I am not pre-writing those here.
+The next work that uses what is already here: the schedule view, drag-to-reschedule recovery, and
+the write-capable agent UI. I am not pre-writing those here.

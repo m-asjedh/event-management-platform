@@ -93,6 +93,47 @@ services:
         condition: service_healthy
     profiles: ["tools"]
 
+  frontend-build:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    profiles: ["tools"]
+
+  gen-api:
+    image: node:22-alpine
+    working_dir: /work/frontend
+    volumes:
+      - ./frontend:/work/frontend
+      - ./openapi:/work/openapi:ro
+    command:
+      - npx
+      - --yes
+      - openapi-typescript@7.13.0
+      - ../openapi/openapi.yaml
+      - -o
+      - src/generated/api.ts
+    profiles: ["tools"]
+
+  frontend:
+    image: node:22-alpine
+    working_dir: /work/frontend
+    environment:
+      API_URL: http://api:8080
+      AUTH_URL: http://auth:3001
+    ports:
+      - "${FRONTEND_PORT:-5173}:5173"
+    volumes:
+      - ./frontend:/work/frontend
+      - ./openapi:/work/openapi:ro
+      - frontend_node_modules:/work/frontend/node_modules
+    command: ["sh", "-c", "npm ci && npm run dev -- --host 0.0.0.0 --port 5173"]
+    depends_on:
+      api:
+        condition: service_healthy
+      auth:
+        condition: service_healthy
+    profiles: ["web"]
+
   # Off-the-shelf auth. It reads and writes the tables in the `auth` schema that the
   # migrations created; it is never allowed to manage schema itself.
   auth:
@@ -163,3 +204,4 @@ services:
 
 volumes:
   postgres_data:
+  frontend_node_modules:

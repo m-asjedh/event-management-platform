@@ -7,7 +7,7 @@
 POSTGRES_USER ?= emp_user
 POSTGRES_DB   ?= event_management_platform
 
-.PHONY: up down reset migrate migrate-status migrate-down lint seed test contract agent agent-scenarios psql db-version
+.PHONY: up down reset migrate migrate-status migrate-down lint seed test contract agent agent-scenarios gen-api check-generated frontend frontend-build psql db-version
 
 ## up: start the database, bring the schema up to date, then start auth and the API
 # Order matters: auth reads tables the migrations create, so it must not start first.
@@ -75,6 +75,23 @@ agent:
 agent-scenarios:
 	docker compose up -d --wait --build auth api
 	docker compose run --rm --build -T agent -scenarios
+
+## gen-api: TypeScript types from openapi/openapi.yaml (never hand-edit the output)
+gen-api:
+	docker compose run --rm gen-api
+
+## check-generated: fail if committed types are stale vs the spec
+check-generated:
+	$(MAKE) gen-api
+	git diff --exit-code -- frontend/src/generated/api.ts
+
+## frontend: Vite dev server on :5173 (not part of make up)
+frontend:
+	docker compose --profile web up -d --wait --build frontend
+
+## frontend-build: tsc + vite build, for CI
+frontend-build:
+	docker compose --profile tools build frontend-build
 
 ## psql: open a psql shell on the database
 psql:

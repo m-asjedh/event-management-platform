@@ -10,6 +10,8 @@ Go · PostgreSQL 18 · OpenAPI · React + Vite · TypeScript
 
 ## Running it
 
+Reviewers verify the build with this. It does **not** start the UI.
+
 ```bash
 make up && make seed && make test
 ```
@@ -17,6 +19,14 @@ make up && make seed && make test
 Requires Docker, Docker Compose and make. Nothing else.
 
 `make seed` only talks to the local Compose database. It truncates first so it can rerun. All seed accounts share one real scrypt hash to keep seeding fast; not a production pattern. Demo password: `correct-horse-battery`.
+
+To **see the UI**, start the stack and then the frontend (a third command on purpose — `make up` stays the fast backend path):
+
+```bash
+make up && make seed && make frontend
+```
+
+Then open http://localhost:5173. `GET /healthz → ok` means the typed call reached the API.
 
 ## Read-only agent
 
@@ -46,5 +56,17 @@ The three scripted scenarios:
 3. As `seed.attendee@example.com`: "Is seed.attendee allowed to see the invitations for Prompt Injection Conference?" → `GET /events`, then `GET /events/{id}/invitations`. The API returns 403; the agent reports the denial and does not invent a list.
 
 `make test` runs those three against an in-process fake HTTP API (no live model, no API key). `make agent-scenarios` runs them against the real seeded server.
+
+## Frontend
+
+Scaffold only: Vite, TanStack Router, TanStack Query, Tailwind, shadcn/ui. Types are generated from `openapi/openapi.yaml`.
+
+The UI is not part of `make up`. Use `make frontend` after the stack is up (see **Running it**). Other targets:
+
+```bash
+make gen-api           # regenerate types after a spec change
+make check-generated   # CI: fail if committed types are stale
+make frontend-build    # tsc + vite build
+```
 
 _Under construction._
