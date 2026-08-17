@@ -1,0 +1,50 @@
+frontend/src/components/invitations/InvitationList.tsx
+  s_a0ce08ea017ba1::t_ffde155554b96a 1-12,22
+  s_a0ce08ea017ba1::t_252086f68b72f1 13-21,23-30,32-98
+  s_a0ce08ea017ba1::t_5119f18c83a3a3 31
+frontend/src/routes/events/$eventId/schedule.tsx
+  s_a0ce08ea017ba1::t_8ce0c1f7ffc1ce 62-69
+frontend/README.md
+  s_a0ce08ea017ba1::t_761d933caa42f9 15
+frontend/src/components/invitations/InvitationList.test.tsx
+  s_a0ce08ea017ba1::t_0b03345b0fb358 1-32,41-45,52-55,57-62,64-209
+  s_a0ce08ea017ba1::t_a74b0ded08fb2d 34,36,38,40,48,51
+  s_a0ce08ea017ba1::t_75412f910ede78 56,63
+  s_a0ce08ea017ba1::t_d7287a894ce319 33,35,37,39,46-47,49-50
+frontend/src/lib/api/types.ts
+  s_a0ce08ea017ba1::t_e1b047369e19e4 16-17
+frontend/src/components/invitations/InvitationRow.tsx
+  s_a0ce08ea017ba1::t_cfaef37b0df722 1-17
+frontend/src/test/setup.ts
+  s_a0ce08ea017ba1::t_99483b9c5f0427 5-12
+frontend/src/lib/query/invitations.ts
+  s_a0ce08ea017ba1::t_1743b0233ab78c 1-21
+frontend/src/routes/events/$eventId/invitations.tsx
+  s_a0ce08ea017ba1::t_3ab35aae2f6f6f 1-57
+TRADEOFFS.md
+  s_a0ce08ea017ba1::t_7e79bb60b6f5fd 104-107,113-114
+frontend/package.json
+  s_a0ce08ea017ba1::t_f19e672d75656b 20
+frontend/src/lib/query/keys.ts
+  s_a0ce08ea017ba1::t_b2217b7c815a82 7
+README.md
+  s_a0ce08ea017ba1::t_e1b00036bf6c84 76-77
+frontend/package-lock.json
+  s_a0ce08ea017ba1::t_114f30ccf3733f 16,1940-1956,2083-2092
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "079eed28212e45a7b8168771600b481723882352",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
