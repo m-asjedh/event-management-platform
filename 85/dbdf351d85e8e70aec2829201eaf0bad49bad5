@@ -1,0 +1,30 @@
+docs/adr/0001-data-driven-authorization.md
+  s_b64bbbcf64e6bb::t_e14419be662eea 1-42
+docs/adr/0002-room-conflicts-and-version.md
+  s_b64bbbcf64e6bb::t_df37a61cd855b7 1-36
+docs/adr/0005-timestamptz-and-event-zone.md
+  s_b64bbbcf64e6bb::t_7ce95032aa7963 1-25
+docs/adr/0004-uuidv7-keys.md
+  s_b64bbbcf64e6bb::t_bc969c1c71de49 1-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "85dbdf351d85e8e70aec2829201eaf0bad49bad5",
+  "prompts": {},
+  "humans": {
+    "h_3283e2518520ac": {
+      "author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_b64bbbcf64e6bb": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "0b24ee3e-7c2b-4c34-9cb3-c75ed1221539",
+        "model": "default"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
