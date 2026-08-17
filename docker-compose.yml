@@ -69,5 +69,28 @@ services:
       retries: 30
     restart: unless-stopped
 
+  api:
+    build: ./backend
+    entrypoint: ["api"]
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-emp_user}:${POSTGRES_PASSWORD:-emp_password}@postgres:5432/${POSTGRES_DB:-event_management_platform}?sslmode=disable
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-dev-only-not-a-real-secret-000000000000}
+      API_PORT: "8080"
+    ports:
+      - "${API_PORT:-8080}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - -qO-
+        - http://127.0.0.1:8080/healthz
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    restart: unless-stopped
+
 volumes:
   postgres_data:

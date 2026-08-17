@@ -4,6 +4,7 @@ go 1.26
 
 require (
 	github.com/jackc/pgx/v5 v5.10.0
+	github.com/jmoiron/sqlx v1.4.0
 	github.com/pressly/goose/v3 v3.27.3
 )
 
