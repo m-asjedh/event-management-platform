@@ -13,6 +13,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/jackc/pgx/v5/stdlib"
 
+	"github.com/m-asjedh/event-management-platform/backend/internal/authz"
+	"github.com/m-asjedh/event-management-platform/backend/internal/events"
 	"github.com/m-asjedh/event-management-platform/backend/internal/identity"
 )
 
@@ -44,14 +46,16 @@ func run() error {
 		return fmt.Errorf("database unreachable: %w", err)
 	}
 
-	store := identity.NewStore(db)
+	users := identity.NewStore(db)
+	grants := authz.NewStore(db)
+	eventStore := events.NewStore(db)
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"status":"ok"}`))
 	})
-	mux.Handle("GET /me", store.Require(secret)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux.Handle("GET /me", users.Require(secret)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := identity.UserFrom(r)
 		if !ok {
 			http.Error(w, `{"code":"INTERNAL","reason":"missing user"}`, http.StatusInternalServerError)
@@ -64,6 +68,7 @@ func run() error {
 			"email": user.Email,
 		})
 	})))
+	mux.Handle("GET /events/{id}", users.Require(secret)(events.Show(eventStore, grants)))
 
 	addr := ":" + getenv("API_PORT", "8080")
 	log.Printf("api listening on %s", addr)
