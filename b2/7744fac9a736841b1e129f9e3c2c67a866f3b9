@@ -1,0 +1,21 @@
+AI-WORKFLOW.md
+  s_a0ce08ea017ba1::t_95b656c9f5ff65 27-34,38-40,46-51,61-97,146
+TRADEOFFS.md
+  s_a0ce08ea017ba1::t_8f4c0da02e2509 1-96
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "b27744fac9a736841b1e129f9e3c2c67a866f3b9",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
