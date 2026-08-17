@@ -40,7 +40,7 @@ func (s *Store) Require(secret string) func(http.Handler) http.Handler {
 					writeUnauthenticated(w)
 					return
 				}
-				http.Error(w, `{"code":"INTERNAL","reason":"session lookup failed"}`, http.StatusInternalServerError)
+				writeError(w, http.StatusInternalServerError, "INTERNAL", "session lookup failed")
 				return
 			}
 
@@ -52,10 +52,14 @@ func (s *Store) Require(secret string) func(http.Handler) http.Handler {
 }
 
 func writeUnauthenticated(w http.ResponseWriter) {
+	writeError(w, http.StatusUnauthorized, "UNAUTHENTICATED", "not signed in")
+}
+
+func writeError(w http.ResponseWriter, status int, code, reason string) {
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusUnauthorized)
+	w.WriteHeader(status)
 	_ = json.NewEncoder(w).Encode(map[string]string{
-		"code":   "UNAUTHENTICATED",
-		"reason": "not signed in",
+		"code":   code,
+		"reason": reason,
 	})
 }

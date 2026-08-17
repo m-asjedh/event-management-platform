@@ -58,7 +58,7 @@ func run() error {
 	mux.Handle("GET /me", users.Require(secret)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, ok := identity.UserFrom(r)
 		if !ok {
-			http.Error(w, `{"code":"INTERNAL","reason":"missing user"}`, http.StatusInternalServerError)
+			writeError(w, http.StatusInternalServerError, "INTERNAL", "missing user")
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
@@ -80,4 +80,13 @@ func getenv(key, fallback string) string {
 		return v
 	}
 	return fallback
+}
+
+func writeError(w http.ResponseWriter, status int, code, reason string) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(map[string]string{
+		"code":   code,
+		"reason": reason,
+	})
 }
