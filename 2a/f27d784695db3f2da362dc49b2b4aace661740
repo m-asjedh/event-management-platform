@@ -1,0 +1,49 @@
+auth/package.json
+  s_a0ce08ea017ba1::t_4044f3b610916e 2-22
+  s_a0ce08ea017ba1::t_ab80f674d0baac 1,23
+auth/tsconfig.json
+  s_a0ce08ea017ba1::t_89fbe10dc3c300 1-18
+auth/src/auth.ts
+  s_a0ce08ea017ba1::t_f96b3f01ab8a63 4,6,8-17,19,21-22,28-30,33-34,36,39-53,97-104
+  s_a0ce08ea017ba1::t_4d733b1b4da22d 1-3,5,7,18,20,23-27,31-32,35,37-38,54-96
+.env.example
+  s_a0ce08ea017ba1::t_26fd998e595247 14-18
+  s_a0ce08ea017ba1::t_ab74ada7889ddd 13
+Makefile
+  s_a0ce08ea017ba1::t_2e48346462a857 17
+  s_a0ce08ea017ba1::t_7b78bced65b391 12-13
+docker-compose.yml
+  s_a0ce08ea017ba1::t_e0af4194f15807 53,55,57,66
+  s_a0ce08ea017ba1::t_d48667d22202fc 45-52,54,56,58-65,67-71
+auth/src/server.ts
+  s_a0ce08ea017ba1::t_a22e5fdb93043d 1-5,7,9,12,14-17,23-26
+  s_a0ce08ea017ba1::t_1492233f882f18 6,8,10-11,13,18-22
+auth/Dockerfile
+  s_a0ce08ea017ba1::t_1eab97ee84d5d2 26
+  s_a0ce08ea017ba1::t_0e3cac60f71b0d 1-25,27-28
+auth/.dockerignore
+  s_a0ce08ea017ba1::t_40c16f2ba667ec 1-4
+auth/package-lock.json
+  s_a0ce08ea017ba1::t_7296f155767e6d 1-1525
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "2af27d784695db3f2da362dc49b2b4aace661740",
+  "prompts": {},
+  "humans": {
+    "h_3283e2518520ac": {
+      "author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
