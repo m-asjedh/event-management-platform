@@ -9,10 +9,12 @@ POSTGRES_DB   ?= event_management_platform
 
 .PHONY: up down reset migrate migrate-status migrate-down psql db-version
 
-## up: start the database, then bring the schema up to date
+## up: start the database, bring the schema up to date, then start the services
+# Order matters: auth reads tables the migrations create, so it must not start first.
 up:
 	docker compose up -d --wait postgres
 	$(MAKE) migrate
+	docker compose up -d --wait --build auth
 
 ## down: stop the stack, keep the data
 down:

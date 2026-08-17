@@ -1,0 +1,23 @@
+{
+  "name": "auth",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Better Auth service for the event management platform",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "better-auth": "^1.6.29",
+    "express": "^5.2.1",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.2.0",
+    "@types/pg": "^8.21.0",
+    "typescript": "^5.9.3"
+  }
+}

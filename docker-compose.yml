@@ -42,5 +42,32 @@ services:
         condition: service_healthy
     profiles: ["tools"]
 
+  # Off-the-shelf auth. It reads and writes the tables in the `auth` schema that the
+  # migrations created; it is never allowed to manage schema itself.
+  auth:
+    build: ./auth
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-emp_user}:${POSTGRES_PASSWORD:-emp_password}@postgres:5432/${POSTGRES_DB:-event_management_platform}?sslmode=disable
+      # Dev-only default so a clean clone starts with no .env. Override for anything real.
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-dev-only-not-a-real-secret-000000000000}
+      BETTER_AUTH_URL: http://localhost:${AUTH_PORT:-3001}
+      TRUSTED_ORIGINS: ${TRUSTED_ORIGINS:-http://localhost:5173}
+      AUTH_PORT: "3001"
+    ports:
+      - "${AUTH_PORT:-3001}:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3001/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    restart: unless-stopped
+
 volumes:
   postgres_data:
