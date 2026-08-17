@@ -1,0 +1,31 @@
+TRADEOFFS.md
+  s_a0ce08ea017ba1::t_b16972bbe506a2 1-98
+AI-WORKFLOW.md
+  s_a0ce08ea017ba1::t_60ea04f1613222 2-11,20-30,32-45,47-86,88-143,145-163,165,167-169,171-176,178,180-181,183
+  h_3283e2518520ac 1,12-19,31,46,87,144,164,166,170,177,179,182
+README.md
+  s_a0ce08ea017ba1::t_51417cb761fd90 1-97
+.gitignore
+  s_a0ce08ea017ba1::t_5851a904a2d141 1-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "291f798b01917f4f6638b19d37f7e26b9a528cb4",
+  "prompts": {},
+  "humans": {
+    "h_3283e2518520ac": {
+      "author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
