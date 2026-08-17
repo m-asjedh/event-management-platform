@@ -24,5 +24,23 @@ services:
       retries: 30
     restart: unless-stopped
 
+  # One-shot. Runs the migrations and exits, so it sits behind a profile and is started
+  # by `make migrate` rather than by `docker compose up`.
+  #
+  # It exists as a container, not as a host command, because the setup is only allowed to
+  # need Docker and make. Building the migrator here means the reviewer needs no Go
+  # toolchain and no goose CLI.
+  migrate:
+    build: ./backend
+    entrypoint: ["migrate"]
+    environment:
+      # `postgres`, not localhost: inside the compose network the database is reached by
+      # service name.
+      DATABASE_URL: postgres://${POSTGRES_USER:-emp_user}:${POSTGRES_PASSWORD:-emp_password}@postgres:5432/${POSTGRES_DB:-event_management_platform}?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles: ["tools"]
+
 volumes:
   postgres_data:

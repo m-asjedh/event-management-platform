@@ -7,11 +7,12 @@
 POSTGRES_USER ?= emp_user
 POSTGRES_DB   ?= event_management_platform
 
-.PHONY: up down reset psql db-version
+.PHONY: up down reset migrate migrate-status migrate-down psql db-version
 
-## up: start the stack and wait until it is healthy
+## up: start the database, then bring the schema up to date
 up:
-	docker compose up -d --wait
+	docker compose up -d --wait postgres
+	$(MAKE) migrate
 
 ## down: stop the stack, keep the data
 down:
@@ -20,6 +21,20 @@ down:
 ## reset: stop the stack and delete the data, so the next `up` initialises from scratch
 reset:
 	docker compose down -v
+
+## migrate: apply any migrations that have not run yet
+# Safe to repeat: goose records applied versions in goose_db_version and skips them, so
+# there is no "is this the first boot" check to get wrong.
+migrate:
+	docker compose run --rm --build migrate up
+
+## migrate-status: show which migrations have been applied
+migrate-status:
+	docker compose run --rm migrate status
+
+## migrate-down: roll back the most recent migration
+migrate-down:
+	docker compose run --rm migrate down
 
 ## psql: open a psql shell on the database
 psql:
