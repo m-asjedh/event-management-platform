@@ -22,6 +22,8 @@ Regenerate types after a spec change:
 make gen-api
 ```
 
+Other frontend make targets:
+
 ```bash
 make frontend-test     # Vitest
 make frontend-build    # tsc + vite build

@@ -1,7 +1,8 @@
 # Tradeoffs
 
-What I have chosen and skipped in the work that exists today. I will add a line when I skip
-something later. I am not listing the rest of the track here.
+What I chose and what I deliberately skipped. A cut that is written down is a
+decision; a silent one looks like I forgot. This reflects the finished
+submission — backend, the Track 3 frontend, and both agents.
 
 ---
 
@@ -9,10 +10,12 @@ something later. I am not listing the rest of the track here.
 
 **Track 3 — Fullstack.**
 
-The interesting problem is the seam: the client moves a session, the server says no, and the UI has
-to recover without lying. Backend-only would prove the constraint and stop. I picked Fullstack
-because that recovery has to be real. The UI is not built yet. The database and the authz edge are,
-so that UI has something truthful to talk to.
+The interesting problem is the seam: the client moves a session, the server
+says no, and the UI has to recover without lying. Backend-only would prove the
+constraint and stop. I picked Fullstack because that recovery has to be real —
+and it is: drag-to-reschedule applies optimistically, then reconciles to server
+truth on ROOM_CONFLICT / STALE_VERSION. The database and authz edge came first
+so the UI always had something truthful to talk to.
 
 ---
 
@@ -36,12 +39,17 @@ There is no `event.create` permission. The creator becomes admin of the new even
 race. PostgreSQL 18 `WITHOUT OVERLAPS` cannot be partial, so it would force every session to have a
 room. Drafts without a room stay legal.
 
-**Optimistic concurrency (schema only).** `sessions.version` exists. No update handler uses it yet.
+**Optimistic concurrency.** `sessions.version` is checked in the same UPDATE
+that increments it (`PATCH /sessions/{id}`). A mismatch is STALE_VERSION, and
+the error body carries `currentState` so the client reconciles without a second
+GET. The drag UI uses exactly that.
 
 **Errors on the routes that exist.** `{code, reason}` JSON, not `text/plain`.
 
-**50k invitations (seed + index, no list API).** Keyset index is `(event_id, id)` because uuidv7 is
-already time-ordered. `EXPLAIN` is in `docs/postgres-18.md`.
+**50k invitations.** Keyset list on `(event_id, id)` because uuidv7 is already
+time-ordered; `EXPLAIN` is in `docs/postgres-18.md`. The endpoint, the opaque
+cursor, and a virtualized fetch-on-scroll UI are all built; a mid-traversal
+insert neither repeats nor skips a row (tested).
 
 **Time.** `timestamptz` plus `events.time_zone`. `tz.Instant` refuses a spring-forward gap and a
 fall-back fold. Display uses the event's zone, proven under `TZ=Pacific/Auckland`.
@@ -128,5 +136,38 @@ keyset at that slice. `status` is a client-side filter of already-loaded pages: 
 
 ## What two more weeks would buy
 
-The next work that uses what is already here is extra agent polish (reload-restore of a pending
-approval would need a server-side run). I am not pre-writing that here.
+In rough priority order — each builds on what already exists:
+
+1. **Audit log, wired.** The append-only who/what/before-after table is cut
+   today because nothing writes it. Two weeks buys the write path on every
+   mutation (create/patch/room), keyed off the same `Grant` context, plus a
+   read endpoint. The schema shape is known; the work is the write hook and the
+   query.
+
+2. **Server-side invitation filtering.** `status` is a client-side filter of
+   already-loaded pages today, because `GET /events/{id}/invitations` has no
+   status param. Two weeks buys a real server filter that composes with the
+   keyset cursor (filter + cursor in one indexed query), so a shared
+   `?status=` link is correct across the full 50k, not just loaded rows.
+
+3. **Speaker-clash detection in the schedule.** DB-enforced speaker
+   double-booking was cut (an exclusion can't span two tables). Two weeks buys
+   the query-time detection the schedule view was designed for: return speaker
+   assignments in `GET /sessions` and flag overlaps client-side, the same way
+   room clashes are shown now — detection without a hard constraint.
+
+4. **Server-side agent run.** The write-capable loop runs in the browser, so a
+   reload loses a pending approval. Two weeks buys a server-side run with an SSE
+   stream and a small run table, so approvals survive reload, multiple clients
+   can observe a run, and the sequence of calls is reconstructable from the
+   server, not just React state.
+
+5. **Shared `23P01` → ROOM_CONFLICT helper.** `Apply` (PATCH) and `Insert`
+   (POST) each translate the exclusion violation today. Small, deliberate
+   duplication; two weeks folds it into one mapping so the error shape can never
+   drift between the two write paths.
+
+6. **Recurring sessions.** Store as rules with exceptions plus schedule history,
+   rather than materialized rows. This is the one item that needs real design,
+   not just wiring — it changes how the schedule is queried and how a single
+   occurrence is edited.

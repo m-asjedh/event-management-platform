@@ -22,8 +22,11 @@ git log --show-notes=ai   # attribution per commit
 
 ## What I drove vs. what I delegated
 
-What exists today: Postgres 18, Better Auth in Compose, data-driven authz, room exclusion, a 50k
-seed, `tz.Instant`, and GET `/healthz` `/me` `/events/{id}`.
+What exists today: the full backend (auth, per-event authz with body filtering,
+room exclusion + version check, keyset pagination, DST edge, 50k seed, contract
+CI, a read-only CLI agent) and the full Track 3 frontend (schedule, drag +
+typed recovery, virtualized invitations, typed URL state, and the
+write-capable agent with an out-of-model approval gate).
 
 **I drove**
 
@@ -39,14 +42,18 @@ seed, `tz.Instant`, and GET `/healthz` `/me` `/events/{id}`.
 - Compose, Dockerfiles, Makefile, first-draft SQL, handler and store boilerplate.
 - The seed's COPY loop, once the counts, fixtures, and "uuidv7 in Go" rule were fixed.
 - First drafts of the ADRs and of the DST tests. Both needed catching (below).
+- First-draft frontend (shell, queries, drag, agent panel). Types, the gate, and the Me alias
+  had to be checked against the generated-types rule.
 
 ---
 
 ## How I planned
 
-For the slices that are in the repo: decide what must stay true (a grant, a room, a unique instant),
-put it in the database or in one function, then write a test that calls that function. I have not
-planned the frontend or the agent here. Those are not built yet.
+Same rule throughout, backend and frontend: decide what must stay true (a grant,
+a room, a unique instant, "the grid never lies about server state"), put it in
+one place — the database, one function, or one gate — then write a test that
+calls that place, not a copy of the logic. On the frontend that meant asserting
+on API call paths and post-rejection state, not on model wording or pixels.
 
 ---
 
@@ -131,6 +138,34 @@ Caught by:
 - `TestCrossZoneLocalRendering` — seeded `Conference 10` (`Asia/Colombo`) is `09:00 +05:30`, not UTC
   `03:30`, not Auckland `15:30`. `make test` sets `TZ=Pacific/Auckland` so that last check is real.
 
+### 3. A generated type that doesn't exist by that name
+
+Wiring sign-out needed a `Me` type. The agent reached for the obvious form:
+
+```ts
+export type Me = components["schemas"]["Me"]
+```
+
+This looks correct — it's how you alias a named schema, and a `Me` schema does
+exist in the spec. But the rest of the codebase derives response types from the
+path, not the schema name (see `SessionList`, `RoomList`, `PatchedSession`).
+Mixing the two styles is the kind of thing that compiles until a spec refactor
+renames or inlines a schema and every schema-name alias breaks at once.
+
+I kept the path form, consistent with the existing types and independent of
+whether the shape is a named schema:
+
+```ts
+export type Me =
+  paths["/me"]["get"]["responses"]["200"]["content"]["application/json"]
+```
+
+Caught by reading it against the existing alias pattern, not by a failing build
+(the schema-name form happened to compile here). Both `paths[...]` and
+`components["schemas"][...]` are valid spec-derived aliases used in
+`frontend/src/lib/api/types.ts`; the point isn't which one — it's that the type
+is derived from the generated schema, never hand-written.
+
 ---
 
 ## Where the AI surfaced a decision
@@ -158,3 +193,5 @@ unknown event id is `FORBIDDEN`, not `NOT_FOUND`.
 | 2026-08-17 | DST edge: `time.Date` turns 02:30 on 2026-03-08 NY into 01:30 EST with no error. `internal/tz.Instant` refuses gaps and folds. Three tests in `tz_test.go`. Seed rows were fine (09:00–16:00). |
 | 2026-08-17 | AI-WORKFLOW: ADR drafts had put back the speaker exclusion and a `created_at` keyset index. TRADEOFFS.md is the cuts that already exist, not the rest of the track. |
 | 2026-08-17 | Nested CRUD listed events before the grant (404 vs 403 leaked existence). Aligned to `Show`: grant first. Event create stays auth-only; no `event.create` row. |
+| 2026-08-18 | Track 3 frontend built: schedule (event-zone times, conflict flags), drag-to-reschedule with typed ROOM_CONFLICT/STALE_VERSION recovery, virtualized invitations over the keyset cursor, typed URL state, write-capable agent with an out-of-model approval gate. Types generated from the spec; `make check-generated` guards drift. |
+| 2026-08-18 | Agent reached for `components["schemas"]["Me"]`; kept the `paths[...]` form to match the existing type-derivation pattern. Added a real Sign out (Better Auth sign-out) so admin↔attendee switching needs no cookie deletion. |

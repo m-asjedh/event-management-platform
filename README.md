@@ -8,6 +8,17 @@ Roles are per event, not global: the same user can be an admin on one event and 
 
 Go · PostgreSQL 18 · OpenAPI · React + Vite · TypeScript
 
+## Where to find things
+
+- Per-event authorization + response filtering: `backend/internal/authz/`
+  (`present_test.go` proves an attendee sees no roster/emails)
+- Room conflict + version check: `backend/internal/sessions/` (`patch_test.go`)
+- Keyset pagination: `backend/internal/invitations/`
+- DST / time handling: `backend/internal/tz/` (`tz_test.go`)
+- Contract CI (server honours the spec): `backend/internal/contract/`
+- ADRs: `docs/adr/` — the three that count are 0001, 0002, 0006
+- AI workflow write-up: `AI-WORKFLOW.md` · Tradeoffs: `TRADEOFFS.md`
+
 ## Running it
 
 Reviewers verify the build with this. It does **not** start the UI.
@@ -67,7 +78,7 @@ The UI is not part of `make up`. After the stack is up (see **Running it**):
 make frontend          # http://localhost:5173
 ```
 
-Sign in as `seed.admin@example.com` / `correct-horse-battery`. The home page lists events you can read; each one opens `/events/$eventId/schedule`.
+Sign in as `seed.admin@example.com` / `correct-horse-battery`. The home page lists events you can read; each one opens `/events/$eventId/schedule`. Use the Sign out control to switch accounts (e.g. `seed.admin@` → `seed.attendee@`) — no cookie clearing needed.
 
 That schedule shows rooms across and time down, in the event's IANA zone. Drag a session to a new
 room or time. A rejected write rolls the block back (or to `currentState` on `STALE_VERSION`); the
@@ -83,5 +94,5 @@ that shows the exact method, path, and JSON; Approve is the only code path that 
 make gen-api           # regenerate types after a spec change
 make check-generated   # CI: fail if committed types are stale
 make frontend-build    # tsc + vite build
-make frontend-test     # Vitest: slots, conflicts, event-zone times
+make frontend-test     # Vitest: schedule, drag recovery, invitations, agent gate, URL state
 ```
