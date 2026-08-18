@@ -1,0 +1,41 @@
+backend/internal/seed/run.go
+  s_a0ce08ea017ba1::t_090ae9d6ed960d 60-62
+  s_a0ce08ea017ba1::t_81d499124867fe 33
+  s_a0ce08ea017ba1::t_8e0b5728e0856e 98-99
+  s_a0ce08ea017ba1::t_e4997867048417 15
+backend/internal/tz/tz_test.go
+  s_a0ce08ea017ba1::t_23d89468cbb9e3 124-127,132
+backend/internal/seed/generate_test.go
+  s_a0ce08ea017ba1::t_685c467adb6803 10-12,14-17,19-20,22-23,52-55,78-92,96-107,109-113,115-116
+Makefile
+  s_a0ce08ea017ba1::t_280a284c42eed0 45,50-54
+  s_a0ce08ea017ba1::t_de66267d7e3e89 10
+  s_a0ce08ea017ba1::t_fd01321df3e087 66
+backend/internal/invitations/http_test.go
+  s_a0ce08ea017ba1::t_371691e56b5cc2 342-351
+  s_a0ce08ea017ba1::t_433aa2f346586e 387,390,392-393,395
+  s_a0ce08ea017ba1::t_4a9f45bad7a17f 203-208
+docker-compose.yml
+  s_a0ce08ea017ba1::t_f36febba842ada 50
+README.md
+  s_a0ce08ea017ba1::t_96dd94628d5f10 32-34
+backend/internal/seed/generate.go
+  s_a0ce08ea017ba1::t_0f1e8fc9738d35 6,13-18,21-68,152,161-163,183-189,202,209,244,277,280-282,285-287,294-295,320-323,340,343-344
+  s_a0ce08ea017ba1::t_6b46a2f00e40d7 245-255
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "748186700e20d03e96629199c470a809cdead73e",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
