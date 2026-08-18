@@ -1,0 +1,20 @@
+backend/internal/invitations/http_test.go
+  s_a0ce08ea017ba1::t_b21d8db9a85f55 385-386,390,408,420-479
+  s_a0ce08ea017ba1::t_2f73c5f2554b17 480
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "ca2624266767296dacfee740d8b35cb72e0aa94e",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
