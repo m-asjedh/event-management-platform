@@ -1,0 +1,65 @@
+frontend/src/lib/agent/json.ts
+  s_a0ce08ea017ba1::t_839bbc0965cf2b 1-38
+frontend/src/lib/agent/planner.ts
+  s_a0ce08ea017ba1::t_cef3355d2af9a8 61-65
+  s_a0ce08ea017ba1::t_11df2dce34664b 1-5,10-60,66-346
+  s_a0ce08ea017ba1::t_aaaca54429d6df 6-9
+frontend/src/components/agent/AgentPanel.tsx
+  s_a0ce08ea017ba1::t_03fda3470f5867 1-37,44-118
+  s_a0ce08ea017ba1::t_26dc3183cbe903 43
+  s_a0ce08ea017ba1::t_68af7489208d13 38-42
+frontend/src/components/agent/ApprovalCard.tsx
+  s_a0ce08ea017ba1::t_4193e2458dc6a5 1-38
+frontend/src/components/agent/AgentTranscript.tsx
+  s_a0ce08ea017ba1::t_4c11d0ec9cbc8a 1-62
+frontend/src/routes/index.tsx
+  s_a0ce08ea017ba1::t_977e6a272c2888 37-41
+frontend/src/lib/agent/run.ts
+  s_a0ce08ea017ba1::t_81b51ff90800d7 64-65,67-68
+  s_a0ce08ea017ba1::t_4577d987062b24 171-182
+  s_a0ce08ea017ba1::t_1b9cb941d29585 66
+  s_a0ce08ea017ba1::t_a3ef1baf5144f5 1-63,69-170,183-221
+frontend/src/routes/agent.tsx
+  s_a0ce08ea017ba1::t_b3f0438b63c02c 1-28
+frontend/src/lib/agent/injection.ts
+  s_a0ce08ea017ba1::t_eb6b034e7b34ef 1-16
+frontend/src/lib/agent/allowlist.ts
+  s_a0ce08ea017ba1::t_4f9ac11c27287a 1-20
+frontend/src/routes/events/$eventId/schedule.tsx
+  s_a0ce08ea017ba1::t_5702b60144f4e0 70-73
+frontend/README.md
+  s_a0ce08ea017ba1::t_6eb3c1db43ebdc 17
+frontend/src/lib/agent/gate.ts
+  s_a0ce08ea017ba1::t_a9d7e826e778fb 1-61
+frontend/src/lib/agent/http.ts
+  s_a0ce08ea017ba1::t_f156383abc7e8e 1-31
+frontend/src/lib/agent/types.ts
+  s_a0ce08ea017ba1::t_9ff2a05a12f671 1-84
+frontend/src/lib/agent/run.test.ts
+  s_a0ce08ea017ba1::t_a80525eaa9996f 355-356
+  s_a0ce08ea017ba1::t_c4507eac2619bd 1-252,254-354,357-359
+  s_a0ce08ea017ba1::t_7dd62c5f73274d 253
+frontend/src/routes/events/$eventId/invitations.tsx
+  s_a0ce08ea017ba1::t_ab7ea07ed5bd2d 83-86
+TRADEOFFS.md
+  s_a0ce08ea017ba1::t_ceadcab0d2775c 131-132
+  s_a0ce08ea017ba1::t_160dc7c9fe3652 74,76-92
+README.md
+  s_a0ce08ea017ba1::t_ebbcfb4faced44 79-81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "3c7f25d6a5e58a32ddab73d40ee476a6a387425d",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
