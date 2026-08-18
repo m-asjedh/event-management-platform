@@ -382,10 +382,12 @@ func TestNoEmailWithoutEmailPermission(t *testing.T) {
 
 func TestKeysetUsesInvitationsIndex(t *testing.T) {
 	f := setup(t)
+	eventID := insertKeysetPlanEvent(t, f.db)
+
 	var ids []string
 	err := f.db.Select(&ids, `
 		SELECT id FROM invitations WHERE event_id = $1 ORDER BY id
-	`, f.eventID)
+	`, eventID)
 	if err != nil {
 		t.Fatalf("ids: %v", err)
 	}
@@ -403,7 +405,7 @@ func TestKeysetUsesInvitationsIndex(t *testing.T) {
 		  AND  id > $2
 		ORDER  BY event_id, id
 		LIMIT  50
-	`, f.eventID, after)
+	`, eventID, after)
 	if err != nil {
 		t.Fatalf("explain: %v", err)
 	}
@@ -414,4 +416,65 @@ func TestKeysetUsesInvitationsIndex(t *testing.T) {
 	if strings.Contains(plan, "Seq Scan") {
 		t.Fatalf("seq scan, plan:\n%s", plan)
 	}
+}
+
+// insertKeysetPlanEvent loads a throwaway event with enough invitations that
+// Postgres chooses invitations_event_id_id_idx for a keyset page.
+//
+// The default seed is ~50 rows per event. At that size the planner bitmaps
+// invitations_event_id_email_key and sorts — correct, but not the scale the
+// index exists for. A single fat event is not enough either: it becomes most
+// of the table and the planner scans invitations_pkey. A sibling event
+// supplies the other rows so this event is a slice, matching seed-full.
+func insertKeysetPlanEvent(t *testing.T, db *sqlx.DB) string {
+	t.Helper()
+	const (
+		probeName  = "keyset-plan-probe"
+		fillerName = "keyset-plan-filler"
+		probeRows  = 2000
+		fillerRows = 8000
+	)
+	_, _ = db.Exec(`DELETE FROM events WHERE name IN ($1, $2)`, probeName, fillerName)
+
+	var probeID, fillerID string
+	err := db.Get(&probeID, `
+		INSERT INTO events (name, time_zone, starts_at, ends_at)
+		VALUES ($1, 'UTC', '2030-01-01 00:00:00+00', '2030-01-02 00:00:00+00')
+		RETURNING id
+	`, probeName)
+	if err != nil {
+		t.Fatalf("probe event: %v", err)
+	}
+	err = db.Get(&fillerID, `
+		INSERT INTO events (name, time_zone, starts_at, ends_at)
+		VALUES ($1, 'UTC', '2030-01-01 00:00:00+00', '2030-01-02 00:00:00+00')
+		RETURNING id
+	`, fillerName)
+	if err != nil {
+		t.Fatalf("filler event: %v", err)
+	}
+	t.Cleanup(func() {
+		_, _ = db.Exec(`DELETE FROM events WHERE id IN ($1, $2)`, probeID, fillerID)
+	})
+
+	_, err = db.Exec(`
+		INSERT INTO invitations (event_id, email, role, status)
+		SELECT $1, 'keyset-plan-' || g || '@example.test', 'attendee', 'pending'
+		FROM   generate_series(1, $2) AS g
+	`, probeID, probeRows)
+	if err != nil {
+		t.Fatalf("probe invitations: %v", err)
+	}
+	_, err = db.Exec(`
+		INSERT INTO invitations (event_id, email, role, status)
+		SELECT $1, 'keyset-plan-filler-' || g || '@example.test', 'attendee', 'pending'
+		FROM   generate_series(1, $2) AS g
+	`, fillerID, fillerRows)
+	if err != nil {
+		t.Fatalf("filler invitations: %v", err)
+	}
+	if _, err := db.Exec(`ANALYZE invitations`); err != nil {
+		t.Fatalf("analyze: %v", err)
+	}
+	return probeID
 }
