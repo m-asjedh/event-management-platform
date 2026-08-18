@@ -1,0 +1,106 @@
+frontend/src/components/ui/input.tsx
+  s_a0ce08ea017ba1::t_f0d765bc296661 1-18
+frontend/src/components/agent/ApprovalCard.tsx
+  s_a0ce08ea017ba1::t_af733b3440a593 16,18-22,25,31
+frontend/src/components/ui/button.tsx
+  s_a0ce08ea017ba1::t_c18dce1dc645a6 14-16,20
+frontend/src/lib/query/keys.ts
+  s_a0ce08ea017ba1::t_c0a947cc81fb8b 5
+frontend/src/lib/api/types.ts
+  s_a0ce08ea017ba1::t_87113e96b0b88c 10-11
+frontend/src/components/ui/badge.tsx
+  s_a0ce08ea017ba1::t_e692e9130fc85c 1-30
+frontend/src/components/auth/SignOutButton.tsx
+  s_a0ce08ea017ba1::t_2c8eafe8adefb8 1-17,19-31
+  s_a0ce08ea017ba1::t_30556837e7c7e6 18
+frontend/src/components/invitations/InvitationRow.tsx
+  s_a0ce08ea017ba1::t_c885073f45726d 1,4-15,21,23,27-31
+frontend/src/components/auth/auth-session.test.tsx
+  s_a0ce08ea017ba1::t_5920f914562d2e 48-51,54,63-66,75,80-92
+  s_a0ce08ea017ba1::t_90fd0a917332ff 1-36,38-47,52-53,55-62,67-74,76-79,93-174,176-180
+  s_a0ce08ea017ba1::t_d40f708038f1ff 175
+  s_a0ce08ea017ba1::t_b9fddfa3061d8f 37
+frontend/src/components/schedule/DayNav.tsx
+  s_a0ce08ea017ba1::t_120835a9f49cfb 24
+  s_a0ce08ea017ba1::t_19bf5cce38e2e0 23
+frontend/src/components/api/ApiErrorView.tsx
+  s_a0ce08ea017ba1::t_0f2c4e4d9eb6e8 3,8-12,18-23,25
+frontend/src/components/layout/PageFrame.tsx
+  s_a0ce08ea017ba1::t_f65fd01f3a3aba 43-44
+  s_a0ce08ea017ba1::t_ec99655e5d25c8 1-42
+frontend/src/routes/index.tsx
+  s_a0ce08ea017ba1::t_8b3069e789cfe7 61-63
+  s_a0ce08ea017ba1::t_c30c23ecb11abc 6-13,31,33-38,47-49,51,55-57,65,71,73-85,93,100
+frontend/src/routes/__root.tsx
+  s_a0ce08ea017ba1::t_cb922c4f2f35c7 2,5-6,13-14,34-39
+  s_a0ce08ea017ba1::t_bead06e24ed232 3,9,11-12,15-20,24-29,31-33,40-45
+  s_a0ce08ea017ba1::t_2ba99f078eca6b 21-23,30
+  s_a0ce08ea017ba1::t_f0c643605b5a11 4
+frontend/src/components/schedule/ScheduleBoard.tsx
+  s_a0ce08ea017ba1::t_b51a4e78aec354 34-37
+frontend/src/components/schedule/SessionBlock.tsx
+  s_a0ce08ea017ba1::t_0fe1c2dc1f3863 34-35
+  s_a0ce08ea017ba1::t_d55b7df00f7778 57,59-60
+  s_a0ce08ea017ba1::t_ee2c5314bd250f 3,5,58,62-63,82-84,86-99
+  s_a0ce08ea017ba1::t_4b2dcc3d61a4c3 20-21
+frontend/src/components/ui/card.tsx
+  s_a0ce08ea017ba1::t_f914380551914b 1-31
+frontend/src/lib/auth/session.ts
+  s_a0ce08ea017ba1::t_1970f3c26bb263 29-33,35-37
+  s_a0ce08ea017ba1::t_86cae2155d6072 1-28,34,38
+frontend/src/components/auth/SignInForm.tsx
+  s_a0ce08ea017ba1::t_f854b86848c22b 6,47,49-50,58,60-61
+  s_a0ce08ea017ba1::t_f1744230f77eec 27,33
+  s_a0ce08ea017ba1::t_0a5d35b2255564 1,3,7-8,12,24-25,29-30,34-35
+  s_a0ce08ea017ba1::t_43d0083ecec7e4 23
+frontend/src/routes/agent.tsx
+  s_a0ce08ea017ba1::t_e7443d7dbb1c72 4-11,19-21,24-28,32,36
+frontend/src/routes/events/$eventId/schedule.tsx
+  s_a0ce08ea017ba1::t_c1f8025de35b37 93-95
+  s_a0ce08ea017ba1::t_dcc3d486e9849c 7-15,41,43-44,67-69,72,76,80-81,84-86,90,112
+  s_a0ce08ea017ba1::t_6c3b837965f9a3 102-104
+frontend/src/components/ui/skeleton.tsx
+  s_a0ce08ea017ba1::t_2ff5280058ebf6 1-12
+frontend/src/components/schedule/MoveNoticeBanner.tsx
+  s_a0ce08ea017ba1::t_5ead3a6f693b18 1-2,15,18,21,23-24
+frontend/src/components/invitations/InvitationList.tsx
+  s_a0ce08ea017ba1::t_d52259cd14a25c 77,85-89,94,105
+frontend/src/lib/query/me.ts
+  s_a0ce08ea017ba1::t_0098ca4a135a2e 1-24
+frontend/src/components/schedule/ScheduleGrid.tsx
+  s_a0ce08ea017ba1::t_57ae6418e89c9b 166-167
+  s_a0ce08ea017ba1::t_0df217882698d8 43-46
+  s_a0ce08ea017ba1::t_a889952dc31379 114-128,130-131,133,137-145,147-165,168-172,175
+  s_a0ce08ea017ba1::t_ffd3df48d06232 17,25-26
+  s_a0ce08ea017ba1::t_630c5e72d47e93 63-64
+  s_a0ce08ea017ba1::t_1ee51d0233024c 174
+frontend/src/components/ui/alert.tsx
+  s_a0ce08ea017ba1::t_4ff4963e0807c9 1-19
+frontend/src/index.css
+  s_a0ce08ea017ba1::t_2582c2a2f08e28 18-30
+  s_a0ce08ea017ba1::t_1dc5adf3982558 6-17
+frontend/src/components/agent/AgentPanel.tsx
+  s_a0ce08ea017ba1::t_53cc764388696a 6-7,12,65,67-68,80-88,114-115
+frontend/src/routes/events/$eventId/invitations.tsx
+  s_a0ce08ea017ba1::t_18f0015c71a215 7-15,48,50-51,83-85,88,92,96-97,100-102,106,112,136
+frontend/src/components/agent/AgentTranscript.tsx
+  s_a0ce08ea017ba1::t_736dd0563fb567 2,8-14,22-63,67,70,76
+frontend/src/components/ui/textarea.tsx
+  s_a0ce08ea017ba1::t_8978d6f7521997 1-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "a1045a403dd4214c43314ba0ecc7eec92c07cf55",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
