@@ -1,0 +1,45 @@
+frontend/src/lib/invitations/search.ts
+  s_a0ce08ea017ba1::t_a30ea8f1a22e8a 1-32
+frontend/src/lib/query/invitations.ts
+  s_a0ce08ea017ba1::t_cb2796db995fc6 4,10-17,19-20,25
+README.md
+  s_a0ce08ea017ba1::t_c6f2ea21e5837f 76-77
+frontend/src/test/routes/invitations.test.tsx
+  s_a0ce08ea017ba1::t_20695f9ccd0fcc 1-257
+frontend/src/routes/events/$eventId/invitations.tsx
+  s_a0ce08ea017ba1::t_f96e4e0724538e 18-22,27-28
+  s_a0ce08ea017ba1::t_ef0945e27909b5 3,7-12,17,25-26,29-30,47-48,51-68,86-88,90-110,112-117
+frontend/src/components/invitations/InvitationList.tsx
+  s_a0ce08ea017ba1::t_c40998b575a1e6 7,13-25,43-44,66-75,84,88-95,138-144
+  s_a0ce08ea017ba1::t_d80d35884ab481 26-30,39-41
+  s_a0ce08ea017ba1::t_5fa60ca550628c 145
+frontend/src/lib/invitations/search.test.ts
+  s_a0ce08ea017ba1::t_26582624ebb82a 1-32
+frontend/src/lib/query/keys.ts
+  s_a0ce08ea017ba1::t_af8369352b5517 1-2,9-12
+TRADEOFFS.md
+  s_a0ce08ea017ba1::t_87d03cd54a0094 115-116
+  s_a0ce08ea017ba1::t_a6e6b428432301 106-109
+frontend/src/lib/api/types.ts
+  s_a0ce08ea017ba1::t_583767bd2f81cb 18-23
+docs/adr/0006-frontend-data-loading.md
+  s_a0ce08ea017ba1::t_b44bb70d77437d 6-7
+frontend/README.md
+  s_a0ce08ea017ba1::t_8d208ccf5bb049 16-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "e6d0666743e8a5102de6f28095c192bc136df918",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
