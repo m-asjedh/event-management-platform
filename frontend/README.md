@@ -13,6 +13,8 @@ make up && make seed && make frontend
 Then open http://localhost:5173, sign in, and open an event's week schedule at
 `/events/$eventId/schedule`. Times are the event IANA zone. Drag to reschedule;
 the server is the authority after a rejection. Invitations: `/events/$eventId/invitations`.
+A shared `?status=&cursor=` link is the same filter plus the same keyset slice; cursor is
+the opaque token, not a scroll pixel.
 
 Regenerate types after a spec change:
 

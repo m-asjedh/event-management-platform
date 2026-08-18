@@ -3,8 +3,8 @@
 ## Decision
 
 TanStack Router owns **where the user is**: navigation, path params, and typed search
-state (`?day=` on the schedule). The route loader preloads data the page cannot render
-without, via `ensureQueryData`.
+state (`?day=` on the schedule; `?status=` and `?cursor=` on invitations). The route
+loader preloads data the page cannot render without, via `ensureQueryData`.
 
 TanStack Query owns **what server data they are looking at**: caches, refetch, and
 mutations with optimistic update and rollback. Drag-to-reschedule patches

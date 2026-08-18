@@ -103,12 +103,14 @@ truth, not the drag library.
 
 **Invitations list.** `useInfiniteQuery` pages on the opaque `nextCursor` (never parsed, never
 an offset). `@tanstack/react-virtual` keeps only the visible rows in the DOM. Fetch-on-scroll
-loads the next page; the last page (`nextCursor` absent) stops cleanly. Shareable URL position
-is not wired yet.
+loads the next page; the last page (`nextCursor` absent) stops cleanly. Position in the URL is
+that same opaque cursor (`replace`, not a pixel or page number), so a shared link starts the
+keyset at that slice. `status` is a client-side filter of already-loaded pages: `GET
+/events/{id}/invitations` has no status query param, and the spec is not changing.
 
 ---
 
 ## What two more weeks would buy
 
-The next work that uses what is already here: putting the invitation cursor in the URL, and the
-write-capable agent UI with an approval gate. I am not pre-writing those here.
+The next work that uses what is already here: the write-capable agent UI with an approval gate.
+I am not pre-writing that here.

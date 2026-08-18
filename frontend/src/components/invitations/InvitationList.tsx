@@ -4,12 +4,30 @@ import { useEffect, useRef } from "react"
 
 import { ApiErrorView } from "@/components/api/ApiErrorView"
 import { InvitationRow } from "@/components/invitations/InvitationRow"
+import type { InvitationCursor, InvitationStatus } from "@/lib/api/types"
 import { invitationsQuery } from "@/lib/query/invitations"
 
 export const INVITATION_ROW_HEIGHT = 48
 export const INVITATION_VIEWPORT_HEIGHT = 384
 
-export function InvitationList({ eventId }: { eventId: string }) {
+const CURSOR_URL_DEBOUNCE_MS = 200
+
+export function InvitationList({
+  eventId,
+  cursor = null,
+  status,
+  onStartCursorChange,
+}: {
+  eventId: string
+  cursor?: InvitationCursor | null
+  status?: InvitationStatus
+  onStartCursorChange?: (next: InvitationCursor) => void
+}) {
+  const seedRef = useRef({ status, cursor })
+  if (seedRef.current.status !== status) {
+    seedRef.current = { status, cursor }
+  }
+
   const {
     data,
     isPending,
@@ -18,9 +36,12 @@ export function InvitationList({ eventId }: { eventId: string }) {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useInfiniteQuery(invitationsQuery(eventId))
+  } = useInfiniteQuery(
+    invitationsQuery(eventId, { cursor: seedRef.current.cursor, status }),
+  )
   const parentRef = useRef<HTMLDivElement>(null)
-  const items = data?.pages.flatMap((page) => page.items) ?? []
+  const loaded = data?.pages.flatMap((page) => page.items) ?? []
+  const items = status ? loaded.filter((row) => row.status === status) : loaded
 
   const virtualizer = useVirtualizer({
     count: items.length,
@@ -42,6 +63,16 @@ export function InvitationList({ eventId }: { eventId: string }) {
     }
   }, [lastVirtualIndex, items.length, hasNextPage, isFetchingNextPage, fetchNextPage])
 
+  const advancedCursor = advancedPageCursor(data?.pageParams)
+
+  useEffect(() => {
+    if (!onStartCursorChange || !advancedCursor) return
+    const timer = window.setTimeout(() => {
+      onStartCursorChange(advancedCursor)
+    }, CURSOR_URL_DEBOUNCE_MS)
+    return () => window.clearTimeout(timer)
+  }, [advancedCursor, onStartCursorChange])
+
   if (isPending) {
     return <p className="text-neutral-600">Loading invitations…</p>
   }
@@ -50,8 +81,16 @@ export function InvitationList({ eventId }: { eventId: string }) {
     return <ApiErrorView error={error} />
   }
 
-  if (items.length === 0) {
+  if (loaded.length === 0) {
     return <p className="text-neutral-700">No invitations on this event.</p>
+  }
+
+  if (items.length === 0) {
+    return (
+      <p className="text-neutral-700">
+        No {status} invitations in the loaded pages.
+      </p>
+    )
   }
 
   return (
@@ -95,4 +134,12 @@ export function InvitationList({ eventId }: { eventId: string }) {
       ) : null}
     </div>
   )
+}
+
+function advancedPageCursor(
+  pageParams: readonly unknown[] | undefined,
+): InvitationCursor | undefined {
+  if (!pageParams || pageParams.length < 2) return undefined
+  const latest = pageParams[pageParams.length - 1]
+  return typeof latest === "string" && latest.length > 0 ? latest : undefined
 }

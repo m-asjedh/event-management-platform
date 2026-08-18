@@ -15,3 +15,9 @@ export type PatchedSession =
   paths["/sessions/{id}"]["patch"]["responses"]["200"]["content"]["application/json"]
 export type Invitation = components["schemas"]["Invitation"]
 export type InvitationPage = components["schemas"]["InvitationPage"]
+export type InvitationStatus = Invitation["status"]
+export type InvitationCursor = NonNullable<
+  NonNullable<
+    paths["/events/{eventId}/invitations"]["get"]["parameters"]["query"]
+  >["cursor"]
+>
