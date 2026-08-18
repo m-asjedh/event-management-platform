@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AgentRouteImport } from './routes/agent'
 import { Route as EventsEventIdInvitationsRouteImport } from './routes/events/$eventId/invitations'
 import { Route as EventsEventIdScheduleRouteImport } from './routes/events/$eventId/schedule'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgentRoute = AgentRouteImport.update({
+  id: '/agent',
+  path: '/agent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EventsEventIdInvitationsRoute =
@@ -32,34 +38,47 @@ const EventsEventIdScheduleRoute = EventsEventIdScheduleRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/agent': typeof AgentRoute
   '/events/$eventId/invitations': typeof EventsEventIdInvitationsRoute
   '/events/$eventId/schedule': typeof EventsEventIdScheduleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/agent': typeof AgentRoute
   '/events/$eventId/invitations': typeof EventsEventIdInvitationsRoute
   '/events/$eventId/schedule': typeof EventsEventIdScheduleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/agent': typeof AgentRoute
   '/events/$eventId/invitations': typeof EventsEventIdInvitationsRoute
   '/events/$eventId/schedule': typeof EventsEventIdScheduleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/events/$eventId/invitations' | '/events/$eventId/schedule'
+  fullPaths:
+    | '/'
+    | '/agent'
+    | '/events/$eventId/invitations'
+    | '/events/$eventId/schedule'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/events/$eventId/invitations' | '/events/$eventId/schedule'
+  to:
+    | '/'
+    | '/agent'
+    | '/events/$eventId/invitations'
+    | '/events/$eventId/schedule'
   id:
     | '__root__'
     | '/'
+    | '/agent'
     | '/events/$eventId/invitations'
     | '/events/$eventId/schedule'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AgentRoute: typeof AgentRoute
   EventsEventIdInvitationsRoute: typeof EventsEventIdInvitationsRoute
   EventsEventIdScheduleRoute: typeof EventsEventIdScheduleRoute
 }
@@ -71,6 +90,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agent': {
+      id: '/agent'
+      path: '/agent'
+      fullPath: '/agent'
+      preLoaderRoute: typeof AgentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/events/$eventId/invitations': {
@@ -92,6 +118,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AgentRoute: AgentRoute,
   EventsEventIdInvitationsRoute: EventsEventIdInvitationsRoute,
   EventsEventIdScheduleRoute: EventsEventIdScheduleRoute,
 }

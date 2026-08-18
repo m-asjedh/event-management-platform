@@ -76,6 +76,9 @@ grid always matches the server.
 Invitations are at `/events/$eventId/invitations`: keyset pages, virtualized rows, fetch on
 scroll. `?cursor=` is the opaque keyset token; `?status=` filters loaded rows in the client.
 
+The agent UI is `/agent`. Reads use the public GET API as you. Writes pause on an approval card
+that shows the exact method, path, and JSON; Approve is the only code path that sends that body.
+
 ```bash
 make gen-api           # regenerate types after a spec change
 make check-generated   # CI: fail if committed types are stale

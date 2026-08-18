@@ -34,7 +34,11 @@ function Home() {
     <main className="mx-auto max-w-xl p-8">
       <h1 className="text-2xl font-semibold">Event management</h1>
       <p className="mt-2 text-neutral-600">
-        Week schedule is read-only. Pick an event.
+        Pick an event, or open the{" "}
+        <Link to="/agent" className="underline">
+          agent
+        </Link>
+        .
       </p>
       <p className="mt-4 font-mono text-sm">GET /healthz → {health.status}</p>
 

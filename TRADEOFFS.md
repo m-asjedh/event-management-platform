@@ -71,9 +71,25 @@ today. An unused column looks like abandoned work.
 **A shared helper for `23P01` → `ROOM_CONFLICT`.** `Apply` (PATCH) and `Insert` (POST) each translate
 the exclusion violation. Left duplicated so the PATCH store is not rewritten this pass.
 
-**Read-only agent.** A bounded GET loop over the public API, with the user's Better Auth cookie.
+**Read-only CLI agent.** A bounded GET loop over the public API, with the user's Better Auth cookie.
 No database, no extra key, no hosted model — a clean machine has no API key, and the three
-scenarios have to be deterministic in `make test`. Write access and a human-in-the-loop UI are later.
+scenarios have to be deterministic in `make test`.
+
+**Agent UI.** The write-capable loop runs in the browser as the signed-in user (same cookie, same
+public routes). Streaming is React state: each GET, proposal, and result is pushed as it happens.
+I did not add an agent SSE endpoint or run tables — approve/deny/interrupt stay in the same
+process as the loop, so the client/server line is the public API. Reload does not restore a pending
+approval; say that if a reviewer asks.
+
+The gate is `executeApprovedWrite` in `frontend/src/lib/agent/gate.ts`. The planner cannot call it.
+Approve mints a ticket bound to the frozen JSON; only then does `sendWrite` run. Deny and interrupt
+never mint a ticket.
+
+Injection: the seeded description is scanned on every GET. A warning is shown. There is no
+role-grant tool and no such route in the spec. Even if a fooled planner proposes
+`POST /events/{id}/members`, the allowlist refuses to send it. The layer I rely on is still the
+**API session** (the request is the user's, `Grant.Can` is unchanged). The code gate and the missing
+route hold even if the model obeys the injected text.
 
 **Frontend types.** TypeScript types come from `openapi/openapi.yaml` via `openapi-typescript`.
 Hand-written response interfaces are not allowed. `make check-generated` regenerates the file and
@@ -112,5 +128,5 @@ keyset at that slice. `status` is a client-side filter of already-loaded pages: 
 
 ## What two more weeks would buy
 
-The next work that uses what is already here: the write-capable agent UI with an approval gate.
-I am not pre-writing that here.
+The next work that uses what is already here is extra agent polish (reload-restore of a pending
+approval would need a server-side run). I am not pre-writing that here.

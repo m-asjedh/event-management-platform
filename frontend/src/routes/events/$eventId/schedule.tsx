@@ -67,6 +67,10 @@ function SchedulePage() {
         >
           Invitations
         </Link>
+        {" · "}
+        <Link to="/agent" className="underline">
+          Agent
+        </Link>
       </p>
       <h1 className="mt-2 text-2xl font-semibold">{event.name}</h1>
       <p className="mt-1 text-sm text-neutral-600">
