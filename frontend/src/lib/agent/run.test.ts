@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest"
+import { describe, expect, it } from "vitest"
 
 import { isPrivilegedWrite } from "@/lib/agent/allowlist"
 import { executeApprovedWrite, freezeProposal } from "@/lib/agent/gate"
@@ -55,8 +55,6 @@ async function waitFor(
 }
 
 describe("agent write gate", () => {
-  afterEach(() => {})
-
   it("sends exactly the approved JSON and nothing else", async () => {
     const rec = recordingHttp()
     const bag = collect()

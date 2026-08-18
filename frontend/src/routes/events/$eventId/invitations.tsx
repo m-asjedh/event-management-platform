@@ -53,7 +53,10 @@ function InvitationsPage() {
       if (next === cursor) return
       void navigate({
         replace: true,
-        search: (prev) => ({ ...prev, cursor: next }),
+        search: (prev: { status?: InvitationStatus; cursor?: InvitationCursor }) => ({
+          ...prev,
+          cursor: next,
+        }),
       })
     },
     [cursor, navigate],
