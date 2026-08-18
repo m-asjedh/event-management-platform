@@ -4,6 +4,32 @@ Events — conferences, weddings, gatherings — with sessions scheduled inside 
 
 Roles are per event, not global: the same user can be an admin on one event and an attendee on another.
 
+## Get started
+
+1. Start Docker Desktop.
+2. Clone this repo and look around.
+3. Verify the backend:
+
+   ```bash
+   make up && make seed && make test
+   ```
+
+4. To start the UI:
+
+   ```bash
+   make frontend
+   ```
+
+5. Open http://localhost:5173 and look around. Sign in as
+   `seed.admin@example.com` / `correct-horse-battery`.
+6. Load the 50k dataset:
+
+   ```bash
+   make seed-full
+   ```
+
+7. Refresh the page to load all data:
+
 ## Stack
 
 Go · PostgreSQL 18 · OpenAPI · React + Vite · TypeScript
