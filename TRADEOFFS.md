@@ -51,8 +51,9 @@ time-ordered; `EXPLAIN` is in `docs/postgres-18.md`. The endpoint, the opaque
 cursor, and a virtualized fetch-on-scroll UI are all built; a mid-traversal
 insert neither repeats nor skips a row (tested). Default seed is small per
 reviewer guidance (confirmed with Prajwal by email); `make seed-full` loads the
-50k. Scale tests assert invariants at any size; the at-scale EXPLAIN plan is
-captured under `seed-full`.
+50k. Walk and mid-traversal tests assert invariants at any size. The keyset
+index plan is proven in-test (a throwaway event; 50 seed rows is not enough for
+the planner); the captured 50k EXPLAIN is in `docs/postgres-18.md`.
 
 **Time.** `timestamptz` plus `events.time_zone`. `tz.Instant` refuses a spring-forward gap and a
 fall-back fold. Display uses the event's zone, proven under `TZ=Pacific/Auckland`.
