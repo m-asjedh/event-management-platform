@@ -1,0 +1,24 @@
+frontend/src/lib/agent/run.test.ts
+  s_a0ce08ea017ba1::t_9fb387f44fda9d 1
+frontend/tsconfig.app.json
+  s_a0ce08ea017ba1::t_86f5e7144746d1 31
+  s_a0ce08ea017ba1::t_47c3afad076e82 7
+frontend/src/routes/events/$eventId/invitations.tsx
+  s_a0ce08ea017ba1::t_bd5108a2d3dae1 56-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "c4d10bf23335c97fbcc3145771826db7ae6bfee4",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
