@@ -49,7 +49,10 @@ GET. The drag UI uses exactly that.
 **50k invitations.** Keyset list on `(event_id, id)` because uuidv7 is already
 time-ordered; `EXPLAIN` is in `docs/postgres-18.md`. The endpoint, the opaque
 cursor, and a virtualized fetch-on-scroll UI are all built; a mid-traversal
-insert neither repeats nor skips a row (tested).
+insert neither repeats nor skips a row (tested). Default seed is small per
+reviewer guidance (confirmed with Prajwal by email); `make seed-full` loads the
+50k. Scale tests assert invariants at any size; the at-scale EXPLAIN plan is
+captured under `seed-full`.
 
 **Time.** `timestamptz` plus `events.time_zone`. `tz.Instant` refuses a spring-forward gap and a
 fall-back fold. Display uses the event's zone, proven under `TZ=Pacific/Auckland`.
