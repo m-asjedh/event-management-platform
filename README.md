@@ -16,7 +16,10 @@ Go · PostgreSQL 18 · OpenAPI · React + Vite · TypeScript
 - Keyset pagination: `backend/internal/invitations/`
 - DST / time handling: `backend/internal/tz/` (`tz_test.go`)
 - Contract CI (server honours the spec): `backend/internal/contract/`
-- ADRs: `docs/adr/` — the three that count are 0001, 0002, 0006
+- ADRs: `docs/adr/` — six records. The three that count for this submission are
+  0001 (data-driven authorization), 0002 (room conflicts and version), and
+  0006 (frontend data loading). 0003–0005 are supporting decisions from the
+  same implementation.
 - AI workflow write-up: `AI-WORKFLOW.md` · Tradeoffs: `TRADEOFFS.md`
 
 ## Running it

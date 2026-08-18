@@ -135,7 +135,7 @@ Caught by:
   not 01:30 EST and not 03:30 EDT.
 - `TestDSTFallBackAmbiguousLocalTime` — `Instant(..., 1, 30, 0)` is `ErrAmbiguousLocalTime`; the two
   01:30s are `2026-11-01T01:30:00-04:00` and `2026-11-01T01:30:00-05:00`.
-- `TestCrossZoneLocalRendering` — seeded `Conference 10` (`Asia/Colombo`) is `09:00 +05:30`, not UTC
+- `TestCrossZoneLocalRendering` — the seeded Asia/Colombo event is `09:00 +05:30`, not UTC
   `03:30`, not Auckland `15:30`. `make test` sets `TZ=Pacific/Auckland` so that last check is real.
 
 ### 3. A generated type that doesn't exist by that name
