@@ -4,6 +4,15 @@ import { useCallback } from "react"
 
 import { ApiErrorView } from "@/components/api/ApiErrorView"
 import { InvitationList } from "@/components/invitations/InvitationList"
+import {
+  NavSep,
+  PageFrame,
+  PageLead,
+  PageNav,
+  PageTitle,
+  navLinkClass,
+} from "@/components/layout/PageFrame"
+import { Skeleton } from "@/components/ui/skeleton"
 import type { InvitationCursor, InvitationStatus } from "@/lib/api/types"
 import {
   INVITATION_STATUSES,
@@ -36,9 +45,10 @@ export const Route = createFileRoute("/events/$eventId/invitations")({
 
 function InvitationsPending() {
   return (
-    <main className="mx-auto max-w-4xl p-8">
+    <PageFrame width="4xl">
       <p className="text-neutral-600">Loading invitations…</p>
-    </main>
+      <Skeleton className="mt-4 h-96 w-full" />
+    </PageFrame>
   )
 }
 
@@ -70,36 +80,36 @@ function InvitationsPage() {
   }
 
   return (
-    <main className="mx-auto max-w-4xl p-6">
-      <p className="text-sm text-neutral-500">
-        <Link to="/" className="underline">
+    <PageFrame width="4xl">
+      <PageNav>
+        <Link to="/" className={navLinkClass}>
           Events
         </Link>
-        {" · "}
+        <NavSep />
         <Link
           to="/events/$eventId/schedule"
           params={{ eventId }}
-          className="underline"
+          className={navLinkClass}
         >
           Schedule
         </Link>
-        {" · "}
-        <Link to="/agent" className="underline">
+        <NavSep />
+        <Link to="/agent" className={navLinkClass}>
           Agent
         </Link>
-      </p>
-      <h1 className="mt-2 text-2xl font-semibold">{event.name}</h1>
-      <p className="mt-1 text-sm text-neutral-600">
+      </PageNav>
+      <PageTitle>{event.name}</PageTitle>
+      <PageLead>
         Position is the opaque keyset cursor in the URL, not a pixel or page
         number. Status filters the pages already loaded — the list API has no
         status parameter.
-      </p>
+      </PageLead>
       <div className="mt-4">
         <label className="flex items-center gap-2 text-sm">
           <span className="text-neutral-600">Status</span>
           <select
             aria-label="Invitation status"
-            className="rounded-md border border-neutral-200 bg-white px-2 py-1"
+            className="h-9 rounded-md border border-neutral-200 bg-white px-3 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/10"
             value={status ?? "all"}
             onChange={(event) => {
               const value = event.target.value
@@ -123,6 +133,6 @@ function InvitationsPage() {
           onStartCursorChange={onStartCursorChange}
         />
       </div>
-    </main>
+    </PageFrame>
   )
 }

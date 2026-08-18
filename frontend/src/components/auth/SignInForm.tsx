@@ -1,10 +1,15 @@
-import { useState, type FormEvent } from "react"
+import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "@tanstack/react-router"
+import { useState, type FormEvent } from "react"
 
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { clearClientSession, postSignIn, postSignOut } from "@/lib/auth/session"
+import { meQuery } from "@/lib/query/me"
 
 export function SignInForm() {
   const router = useRouter()
+  const queryClient = useQueryClient()
   const [email, setEmail] = useState("seed.admin@example.com")
   const [password, setPassword] = useState("correct-horse-battery")
   const [busy, setBusy] = useState(false)
@@ -15,16 +20,19 @@ export function SignInForm() {
     setBusy(true)
     setMessage(null)
     try {
-      const res = await fetch("/api/auth/sign-in/email", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      })
+      // Sign out first so an existing session cannot mix with the new login.
+      await postSignOut()
+      const res = await postSignIn(email, password)
       if (!res.ok) {
+        await clearClientSession(queryClient, null)
         setMessage("Sign-in failed. Check the email and password.")
+        await router.navigate({ to: "/" })
+        await router.invalidate()
         return
       }
+      await clearClientSession(queryClient)
+      await queryClient.fetchQuery(meQuery)
+      await router.navigate({ to: "/" })
       await router.invalidate()
     } finally {
       setBusy(false)
@@ -36,10 +44,10 @@ export function SignInForm() {
       <p className="text-sm text-neutral-600">
         Better Auth cookie via the Vite proxy. Demo password is in the README.
       </p>
-      <label className="text-sm">
+      <label className="text-sm font-medium text-neutral-800">
         Email
-        <input
-          className="mt-1 w-full rounded-md border border-neutral-300 px-2 py-1.5"
+        <Input
+          className="mt-1"
           type="email"
           name="email"
           autoComplete="username"
@@ -47,10 +55,10 @@ export function SignInForm() {
           onChange={(ev) => setEmail(ev.target.value)}
         />
       </label>
-      <label className="text-sm">
+      <label className="text-sm font-medium text-neutral-800">
         Password
-        <input
-          className="mt-1 w-full rounded-md border border-neutral-300 px-2 py-1.5"
+        <Input
+          className="mt-1"
           type="password"
           name="password"
           autoComplete="current-password"

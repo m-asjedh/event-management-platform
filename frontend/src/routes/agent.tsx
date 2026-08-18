@@ -1,6 +1,14 @@
 import { Link, createFileRoute } from "@tanstack/react-router"
 
 import { AgentPanel } from "@/components/agent/AgentPanel"
+import {
+  NavSep,
+  PageFrame,
+  PageLead,
+  PageNav,
+  PageTitle,
+  navLinkClass,
+} from "@/components/layout/PageFrame"
 
 export const Route = createFileRoute("/agent")({
   component: AgentPage,
@@ -8,21 +16,23 @@ export const Route = createFileRoute("/agent")({
 
 function AgentPage() {
   return (
-    <main className="mx-auto max-w-3xl p-6">
-      <p className="text-sm text-neutral-500">
-        <Link to="/" className="underline">
+    <PageFrame width="3xl">
+      <PageNav>
+        <Link to="/" className={navLinkClass}>
           Events
         </Link>
-      </p>
-      <h1 className="mt-2 text-2xl font-semibold">Agent</h1>
-      <p className="mt-1 text-sm text-neutral-600">
+        <NavSep />
+        <span className="text-neutral-800">Agent</span>
+      </PageNav>
+      <PageTitle>Agent</PageTitle>
+      <PageLead>
         The loop runs in this tab, as you, through the public API. Reads go out
         immediately. Writes pause until you approve the exact JSON. There is no
         elevated key.
-      </p>
+      </PageLead>
       <div className="mt-6">
         <AgentPanel />
       </div>
-    </main>
+    </PageFrame>
   )
 }

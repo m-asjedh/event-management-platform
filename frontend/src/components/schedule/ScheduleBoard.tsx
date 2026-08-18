@@ -31,6 +31,10 @@ export function ScheduleBoard({
         sessions={data.items}
         day={day}
         onReschedule={move.mutate}
+        movingSessionId={move.isPending ? move.variables?.session.id : undefined}
+        revertingSessionId={
+          move.notice && !move.isPending ? move.variables?.session.id : undefined
+        }
       />
     </div>
   )

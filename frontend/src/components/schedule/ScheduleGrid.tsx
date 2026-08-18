@@ -14,6 +14,7 @@ import { SessionBlock } from "@/components/schedule/SessionBlock"
 import { HOUR_HEIGHT, hourRange, placeSessions } from "@/lib/schedule/layout"
 import { dropToMove, type MoveSessionInput } from "@/lib/schedule/drop"
 import { sameEventDay } from "@/lib/tz/eventZone"
+import { cn } from "@/lib/utils"
 
 type ScheduleGridProps = {
   event: Event
@@ -21,6 +22,8 @@ type ScheduleGridProps = {
   sessions: Session[]
   day: string
   onReschedule?: (input: MoveSessionInput) => void
+  movingSessionId?: string
+  revertingSessionId?: string
 }
 
 function RoomColumn({
@@ -37,11 +40,10 @@ function RoomColumn({
     <div
       ref={setNodeRef}
       data-testid={`room-column-${id}`}
-      className={
-        isOver
-          ? "relative border-l bg-amber-50 bg-[linear-gradient(to_bottom,transparent_calc(100%-1px),rgb(229_229_229)_1px)]"
-          : "relative border-l bg-[linear-gradient(to_bottom,transparent_calc(100%-1px),rgb(229_229_229)_1px)]"
-      }
+      className={cn(
+        "relative border-l bg-[linear-gradient(to_bottom,transparent_calc(100%-1px),rgb(229_229_229)_1px)]",
+        isOver ? "bg-amber-50 ring-2 ring-inset ring-amber-400" : "bg-white",
+      )}
       style={{
         height,
         backgroundSize: `100% ${HOUR_HEIGHT}px`,
@@ -58,6 +60,8 @@ export function ScheduleGrid({
   sessions,
   day,
   onReschedule,
+  movingSessionId,
+  revertingSessionId,
 }: ScheduleGridProps) {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -107,63 +111,67 @@ export function ScheduleGrid({
   }
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="overflow-x-auto">
-        <div
-          className="grid min-w-160"
-          style={{
-            gridTemplateColumns: `3.5rem repeat(${columns.length}, minmax(8rem, 1fr))`,
-          }}
-        >
-          <div className="sticky top-0 z-10 border-b bg-neutral-50" />
-          {columns.map((col) => (
-            <div
-              key={col.id}
-              className="sticky top-0 z-10 border-b border-l bg-neutral-50 px-2 py-2 text-sm font-medium"
-            >
-              {col.name}
-            </div>
-          ))}
-
-          <div className="relative border-r" style={{ height }}>
-            {hours.map((hour) => (
+    <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="overflow-x-auto">
+          <div
+            className="grid min-w-160"
+            style={{
+              gridTemplateColumns: `3.5rem repeat(${columns.length}, minmax(8rem, 1fr))`,
+            }}
+          >
+            <div className="sticky top-0 z-10 border-b bg-neutral-100/80 backdrop-blur" />
+            {columns.map((col) => (
               <div
-                key={hour}
-                className="absolute right-1 text-[11px] tabular-nums text-neutral-500"
-                style={{ top: (hour - startHour) * HOUR_HEIGHT - 7 }}
+                key={col.id}
+                className="sticky top-0 z-10 border-b border-l bg-neutral-100/80 px-2 py-2 text-sm font-medium backdrop-blur"
               >
-                {`${hour.toString().padStart(2, "0")}:00`}
+                {col.name}
               </div>
             ))}
-          </div>
 
-          {columns.map((col) => (
-            <RoomColumn key={col.id} id={col.id} height={height}>
-              {col.items.map((item) => (
-                <SessionBlock
-                  key={item.session.id}
-                  session={item.session}
-                  roomName={roomName(item.session)}
-                  timeZone={event.timeZone}
-                  conflict={item.conflict}
-                  lane={item.lane}
-                  lanes={item.lanes}
-                  top={((item.startMin - gridStartMin) / 60) * HOUR_HEIGHT}
-                  height={Math.max(
-                    ((item.endMin - item.startMin) / 60) * HOUR_HEIGHT,
-                    36,
-                  )}
-                  draggable={Boolean(onReschedule)}
-                />
+            <div className="relative border-r" style={{ height }}>
+              {hours.map((hour) => (
+                <div
+                  key={hour}
+                  className="absolute right-1 text-[11px] tabular-nums text-neutral-500"
+                  style={{ top: (hour - startHour) * HOUR_HEIGHT - 7 }}
+                >
+                  {`${hour.toString().padStart(2, "0")}:00`}
+                </div>
               ))}
-            </RoomColumn>
-          ))}
+            </div>
+
+            {columns.map((col) => (
+              <RoomColumn key={col.id} id={col.id} height={height}>
+                {col.items.map((item) => (
+                  <SessionBlock
+                    key={item.session.id}
+                    session={item.session}
+                    roomName={roomName(item.session)}
+                    timeZone={event.timeZone}
+                    conflict={item.conflict}
+                    lane={item.lane}
+                    lanes={item.lanes}
+                    top={((item.startMin - gridStartMin) / 60) * HOUR_HEIGHT}
+                    height={Math.max(
+                      ((item.endMin - item.startMin) / 60) * HOUR_HEIGHT,
+                      36,
+                    )}
+                    draggable={Boolean(onReschedule)}
+                    moving={item.session.id === movingSessionId}
+                    reverting={item.session.id === revertingSessionId}
+                  />
+                ))}
+              </RoomColumn>
+            ))}
+          </div>
         </div>
-      </div>
-    </DndContext>
+      </DndContext>
+    </div>
   )
 }

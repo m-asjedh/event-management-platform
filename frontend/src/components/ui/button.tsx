@@ -11,9 +11,13 @@ const buttonVariants = cva(
       variant: {
         default: "bg-neutral-900 text-white hover:bg-neutral-800",
         outline: "border border-neutral-200 bg-white hover:bg-neutral-100",
+        secondary: "bg-neutral-100 text-neutral-900 hover:bg-neutral-200",
+        ghost: "hover:bg-neutral-100",
+        destructive: "bg-red-700 text-white hover:bg-red-800",
       },
       size: {
         default: "h-9 px-4 py-2",
+        sm: "h-8 px-2.5 text-xs",
       },
     },
     defaultVariants: {

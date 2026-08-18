@@ -4,6 +4,15 @@ import { Link, createFileRoute } from "@tanstack/react-router"
 import { ApiErrorView } from "@/components/api/ApiErrorView"
 import { DayNav } from "@/components/schedule/DayNav"
 import { ScheduleBoard } from "@/components/schedule/ScheduleBoard"
+import {
+  NavSep,
+  PageFrame,
+  PageLead,
+  PageNav,
+  PageTitle,
+  navLinkClass,
+} from "@/components/layout/PageFrame"
+import { Skeleton } from "@/components/ui/skeleton"
 import { eventQuery } from "@/lib/query/events"
 import { roomsQuery } from "@/lib/query/rooms"
 import { sessionsQuery } from "@/lib/query/sessions"
@@ -29,9 +38,10 @@ export const Route = createFileRoute("/events/$eventId/schedule")({
 
 function SchedulePending() {
   return (
-    <main className="mx-auto max-w-6xl p-8">
+    <PageFrame width="6xl">
       <p className="text-neutral-600">Loading schedule…</p>
-    </main>
+      <Skeleton className="mt-4 h-64 w-full" />
+    </PageFrame>
   )
 }
 
@@ -54,40 +64,44 @@ function SchedulePage() {
   )
 
   return (
-    <main className="mx-auto max-w-6xl p-6">
-      <p className="text-sm text-neutral-500">
-        <Link to="/" className="underline">
+    <PageFrame width="6xl">
+      <PageNav>
+        <Link to="/" className={navLinkClass}>
           Events
         </Link>
-        {" · "}
+        <NavSep />
         <Link
           to="/events/$eventId/invitations"
           params={{ eventId }}
-          className="underline"
+          className={navLinkClass}
         >
           Invitations
         </Link>
-        {" · "}
-        <Link to="/agent" className="underline">
+        <NavSep />
+        <Link to="/agent" className={navLinkClass}>
           Agent
         </Link>
-      </p>
-      <h1 className="mt-2 text-2xl font-semibold">{event.name}</h1>
-      <p className="mt-1 text-sm text-neutral-600">
+      </PageNav>
+      <PageTitle>{event.name}</PageTitle>
+      <PageLead>
         Times in <span className="font-mono">{event.timeZone}</span>, not the
         browser zone. Drag a session to a new room or time. Rejections roll back
         to server truth.
-      </p>
+      </PageLead>
 
       {sessions.length === 0 ? (
-        <p className="mt-8 text-neutral-700">No sessions on this event.</p>
+        <p className="mt-8 rounded-xl border border-dashed border-neutral-200 bg-white px-4 py-8 text-center text-sm text-neutral-700">
+          No sessions on this event.
+        </p>
       ) : (
         <>
           <div className="mt-6">
             <DayNav eventId={eventId} day={day} />
           </div>
           {onDay.length === 0 ? (
-            <p className="mt-8 text-neutral-700">No sessions on {day}.</p>
+            <p className="mt-8 rounded-xl border border-dashed border-neutral-200 bg-white px-4 py-8 text-center text-sm text-neutral-700">
+              No sessions on {day}.
+            </p>
           ) : (
             <div className="mt-4">
               <ScheduleBoard event={event} rooms={rooms} day={day} />
@@ -95,6 +109,6 @@ function SchedulePage() {
           )}
         </>
       )}
-    </main>
+    </PageFrame>
   )
 }

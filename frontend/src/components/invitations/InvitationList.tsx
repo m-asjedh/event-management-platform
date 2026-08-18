@@ -74,7 +74,7 @@ export function InvitationList({
   }, [advancedCursor, onStartCursorChange])
 
   if (isPending) {
-    return <p className="text-neutral-600">Loading invitations…</p>
+    return <p className="text-sm text-neutral-600">Loading invitations…</p>
   }
 
   if (isError) {
@@ -82,12 +82,16 @@ export function InvitationList({
   }
 
   if (loaded.length === 0) {
-    return <p className="text-neutral-700">No invitations on this event.</p>
+    return (
+      <p className="rounded-xl border border-dashed border-neutral-200 bg-white px-4 py-8 text-center text-sm text-neutral-700">
+        No invitations on this event.
+      </p>
+    )
   }
 
   if (items.length === 0) {
     return (
-      <p className="text-neutral-700">
+      <p className="rounded-xl border border-dashed border-neutral-200 bg-white px-4 py-8 text-center text-sm text-neutral-700">
         No {status} invitations in the loaded pages.
       </p>
     )
@@ -98,7 +102,7 @@ export function InvitationList({
       <div
         ref={parentRef}
         data-testid="invitation-scroll"
-        className="overflow-auto rounded-md border"
+        className="overflow-auto rounded-xl border border-neutral-200 bg-white shadow-sm"
         style={{ height: INVITATION_VIEWPORT_HEIGHT }}
       >
         <div

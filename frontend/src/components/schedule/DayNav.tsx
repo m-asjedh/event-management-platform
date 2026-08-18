@@ -20,8 +20,8 @@ export function DayNav({ eventId, day }: DayNavProps) {
           <Button
             key={ymd}
             variant={selected ? "default" : "outline"}
-            size="default"
-            className={cn("h-8 px-2.5 text-xs", selected && "pointer-events-none")}
+            size="sm"
+            className={cn(selected && "pointer-events-none")}
             asChild
           >
             <Link

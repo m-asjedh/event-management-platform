@@ -2,6 +2,7 @@ import type { InvitationStatus } from "@/lib/api/types"
 
 export const queryKeys = {
   health: ["health"] as const,
+  me: ["me"] as const,
   events: ["events"] as const,
   event: (id: string) => ["events", id] as const,
   rooms: (eventId: string) => ["events", eventId, "rooms"] as const,

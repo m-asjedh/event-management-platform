@@ -3,10 +3,13 @@ import { useRef, useState } from "react"
 import { AgentTranscript } from "@/components/agent/AgentTranscript"
 import { ApprovalCard } from "@/components/agent/ApprovalCard"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { browserHttp } from "@/lib/agent/http"
 import { defaultPlanner } from "@/lib/agent/planner"
 import { createAgentRun, type AgentRun } from "@/lib/agent/run"
 import type { AgentEvent, AgentStatus, WriteProposal } from "@/lib/agent/types"
+import { cn } from "@/lib/utils"
 
 const examples = [
   "Which events are in America/New_York?",
@@ -59,10 +62,10 @@ export function AgentPanel() {
           ask(question)
         }}
       >
-        <label className="block text-sm">
+        <label className="block text-sm font-medium text-neutral-800">
           Question
-          <textarea
-            className="mt-1 w-full rounded-md border px-3 py-2 text-sm"
+          <Textarea
+            className="mt-1"
             rows={3}
             value={question}
             onChange={(event) => setQuestion(event.target.value)}
@@ -74,7 +77,15 @@ export function AgentPanel() {
       </form>
       <p className="mt-2 text-xs text-neutral-500">Try: {examples.join(" · ")}</p>
 
-      <p className="mt-4 font-mono text-xs text-neutral-600" data-testid="agent-status">
+      <p
+        className={cn(
+          "mt-4 inline-flex rounded-full border px-2.5 py-0.5 font-mono text-xs",
+          status === "awaiting_approval"
+            ? "border-amber-300 bg-amber-50 text-amber-900"
+            : "border-neutral-200 bg-neutral-50 text-neutral-600",
+        )}
+        data-testid="agent-status"
+      >
         {status}
       </p>
 
@@ -100,8 +111,8 @@ export function AgentPanel() {
           runRef.current?.interrupt(correction)
         }}
       >
-        <input
-          className="min-w-0 flex-1 rounded-md border px-3 py-2 text-sm"
+        <Input
+          className="min-w-0 flex-1"
           value={correction}
           onChange={(event) => setCorrection(event.target.value)}
           placeholder="Interrupt: use Hall A"

@@ -7,6 +7,8 @@ export type Session = components["schemas"]["Session"]
 export type Room = components["schemas"]["Room"]
 export type EventPage = components["schemas"]["EventPage"]
 export type SessionPatch = components["schemas"]["SessionPatch"]
+export type Me =
+  paths["/me"]["get"]["responses"]["200"]["content"]["application/json"]
 export type SessionList =
   paths["/events/{eventId}/sessions"]["get"]["responses"]["200"]["content"]["application/json"]
 export type RoomList =
