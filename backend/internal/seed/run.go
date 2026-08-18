@@ -12,7 +12,7 @@ import (
 	"golang.org/x/crypto/scrypt"
 )
 
-func Run(ctx context.Context, databaseURL string) error {
+func Run(ctx context.Context, databaseURL string, size Size) error {
 	start := time.Now()
 
 	if err := requireComposePostgres(databaseURL); err != nil {
@@ -30,7 +30,7 @@ func Run(ctx context.Context, databaseURL string) error {
 		return fmt.Errorf("password hash: %w", err)
 	}
 
-	data := Generate(hash)
+	data := Generate(hash, size)
 
 	// Domain rows and auth login rows only. roles, permissions, time_zones, and
 	// goose_db_version stay. make seed only launches this binary inside Compose,
@@ -57,7 +57,9 @@ func Run(ctx context.Context, databaseURL string) error {
 		return err
 	}
 
-	fmt.Printf("seed finished in %s\n", time.Since(start).Round(time.Millisecond))
+	fmt.Printf("seed %s finished in %s\n", size.Label, time.Since(start).Round(time.Millisecond))
+	fmt.Printf("%d events, %d users, %d invitations\n",
+		len(data.Events), len(data.Users), len(data.Invitations))
 	fmt.Printf("demo logins, password %q:\n  %s\n  %s\n",
 		DemoPassword, data.Users[0].Email, data.Users[1].Email)
 	return nil
@@ -93,7 +95,8 @@ func Main() {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel()
-	if err := Run(ctx, dsn); err != nil {
+	size := ParseSize(os.Getenv("SEED_SIZE"))
+	if err := Run(ctx, dsn, size); err != nil {
 		fmt.Fprintln(os.Stderr, "seed:", err)
 		os.Exit(1)
 	}

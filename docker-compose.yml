@@ -47,6 +47,7 @@ services:
     entrypoint: ["seed"]
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER:-emp_user}:${POSTGRES_PASSWORD:-emp_password}@postgres:5432/${POSTGRES_DB:-event_management_platform}?sslmode=disable
+      SEED_SIZE: ${SEED_SIZE:-small}
     depends_on:
       postgres:
         condition: service_healthy

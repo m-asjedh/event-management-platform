@@ -7,7 +7,7 @@
 POSTGRES_USER ?= emp_user
 POSTGRES_DB   ?= event_management_platform
 
-.PHONY: up down reset migrate migrate-status migrate-down lint seed test contract agent agent-scenarios gen-api check-generated frontend frontend-build frontend-test psql db-version
+.PHONY: up down reset migrate migrate-status migrate-down lint seed seed-full test contract agent agent-scenarios gen-api check-generated frontend frontend-build frontend-test psql db-version
 
 ## up: start the database, bring the schema up to date, then start auth and the API
 # Order matters: auth reads tables the migrations create, so it must not start first.
@@ -42,12 +42,16 @@ migrate-status:
 migrate-down:
 	docker compose run --rm migrate down
 
-## seed: fill the migrated database with the scale dataset
+## seed: fill the migrated database with the small dataset (default, fast)
 # Safe to repeat: the seeder truncates domain and auth rows first, then COPY.
 # Only the Compose postgres service: DATABASE_URL is hardcoded to host `postgres`
 # in docker-compose.yml, and the binary refuses any other host.
 seed:
-	docker compose run --rm --build seed
+	docker compose run --rm --build -e SEED_SIZE=small seed
+
+## seed-full: the 50-event / 5k-user / 50k-invitation dataset
+seed-full:
+	docker compose run --rm --build -e SEED_SIZE=full seed
 
 ## test: run Go tests inside Compose, against the local database
 # Does not start the API. Contract checks against the live server are `make contract`.
@@ -59,7 +63,7 @@ test:
 contract:
 	docker compose up -d --wait postgres
 	$(MAKE) migrate
-	docker compose run --rm --build seed
+	$(MAKE) seed
 	docker compose up -d --wait --build api
 	docker compose run --rm --build contract
 

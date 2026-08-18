@@ -29,7 +29,9 @@ make up && make seed && make test
 
 Requires Docker, Docker Compose and make. Nothing else.
 
-`make seed` only talks to the local Compose database. It truncates first so it can rerun. All seed accounts share one real scrypt hash to keep seeding fast; not a production pattern. Demo password: `correct-horse-battery`.
+`make seed` is the fast default (required fixtures, a few hundred invitations). `make seed-full` loads the 50-event / 5k-user / 50k-invitation dataset for the invitations pagination demo.
+
+All seed accounts share one real scrypt hash to keep seeding fast; not a production pattern. Demo password: `correct-horse-battery`. `make seed` only talks to the local Compose database and truncates first so it can rerun.
 
 To **see the UI**, start the stack and then the frontend (a third command on purpose — `make up` stays the fast backend path):
 

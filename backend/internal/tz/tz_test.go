@@ -121,13 +121,15 @@ func TestCrossZoneLocalRendering(t *testing.T) {
 	err = db.Get(&row, `
 		SELECT name, time_zone, starts_at
 		FROM   events
-		WHERE  name = $1
-	`, "Conference 10")
+		WHERE  time_zone = $1
+		ORDER  BY name
+		LIMIT  1
+	`, "Asia/Colombo")
 	if err != nil {
 		t.Fatalf("seeded Asia/Colombo event: %v", err)
 	}
 	if row.TimeZone != "Asia/Colombo" {
-		t.Fatalf("Conference 10 zone got %q", row.TimeZone)
+		t.Fatalf("Colombo zone got %q", row.TimeZone)
 	}
 
 	local, err := WallClock(row.StartsAt, row.TimeZone)

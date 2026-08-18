@@ -200,8 +200,12 @@ func TestWalkToEndHasNoNextCursor(t *testing.T) {
 		}
 		n += len(p.Items)
 		if p.NextCursor == "" {
-			if n != 1000 {
-				t.Fatalf("walked %d rows, seed has 1000 invitations on this event", n)
+			var want int
+			if err := f.db.Get(&want, `SELECT COUNT(*) FROM invitations WHERE event_id = $1`, f.eventID); err != nil {
+				t.Fatalf("count: %v", err)
+			}
+			if n != want {
+				t.Fatalf("walked %d rows, event has %d invitations", n, want)
 			}
 			return
 		}
@@ -335,7 +339,16 @@ func TestNoEmailWithoutEmailPermission(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	userID := "usr_0400"
+	var userID string
+	err = f.db.Get(&userID, `
+		SELECT id FROM auth.users
+		WHERE id NOT IN (SELECT user_id FROM event_members WHERE event_id = $1)
+		ORDER BY id
+		LIMIT 1
+	`, f.eventID)
+	if err != nil {
+		t.Fatalf("spare user: %v", err)
+	}
 	_, err = f.db.Exec(`
 		INSERT INTO event_members (event_id, user_id, role) VALUES ($1, $2, $3)
 		ON CONFLICT (event_id, user_id) DO UPDATE SET role = $3
@@ -371,15 +384,15 @@ func TestKeysetUsesInvitationsIndex(t *testing.T) {
 	f := setup(t)
 	var ids []string
 	err := f.db.Select(&ids, `
-		SELECT id FROM invitations WHERE event_id = $1 ORDER BY id LIMIT 201
+		SELECT id FROM invitations WHERE event_id = $1 ORDER BY id
 	`, f.eventID)
 	if err != nil {
-		t.Fatalf("deep cursor: %v", err)
+		t.Fatalf("ids: %v", err)
 	}
-	if len(ids) < 201 {
-		t.Fatalf("want 201 ids, got %d", len(ids))
+	if len(ids) < 2 {
+		t.Fatalf("want at least 2 invitations to explain a keyset page, got %d", len(ids))
 	}
-	after := ids[200]
+	after := ids[len(ids)/4]
 
 	var lines []string
 	err = f.db.Select(&lines, `

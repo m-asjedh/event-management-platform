@@ -7,16 +7,20 @@ import (
 )
 
 func TestGenerateCountsAndFixtures(t *testing.T) {
-	d := Generate("salt:hash")
+	t.Run("full", func(t *testing.T) { assertFixtures(t, Generate("salt:hash", SizeFull), SizeFull) })
+	t.Run("small", func(t *testing.T) { assertFixtures(t, Generate("salt:hash", SizeSmall), SizeSmall) })
+}
 
-	if len(d.Users) != UserCount {
-		t.Fatalf("users: got %d", len(d.Users))
+func assertFixtures(t *testing.T, d Data, size Size) {
+	t.Helper()
+	if len(d.Users) != size.Users {
+		t.Fatalf("users: got %d want %d", len(d.Users), size.Users)
 	}
-	if len(d.Events) != EventCount {
-		t.Fatalf("events: got %d", len(d.Events))
+	if len(d.Events) != size.Events {
+		t.Fatalf("events: got %d want %d", len(d.Events), size.Events)
 	}
-	if len(d.Invitations) != EventCount*InvitesPerEvent {
-		t.Fatalf("invitations: got %d", len(d.Invitations))
+	if len(d.Invitations) != size.Events*size.InvitesPerEvent {
+		t.Fatalf("invitations: got %d want %d", len(d.Invitations), size.Events*size.InvitesPerEvent)
 	}
 
 	zones := map[string]int{}
@@ -45,6 +49,10 @@ func TestGenerateCountsAndFixtures(t *testing.T) {
 		t.Fatalf("want several zones, got %v", zones)
 	}
 
+	if d.Users[0].Email != "seed.admin@example.com" || d.Users[1].Email != "seed.attendee@example.com" {
+		t.Fatalf("demo logins: %s %s", d.Users[0].Email, d.Users[1].Email)
+	}
+
 	adminOn0 := ""
 	attendeeOn1 := map[string]bool{}
 	for _, m := range d.Members {
@@ -67,18 +75,44 @@ func TestGenerateCountsAndFixtures(t *testing.T) {
 			t.Fatalf("injection text leaked onto %q", e.Name)
 		}
 	}
+
+	var rooms, sessions int
+	for _, r := range d.Rooms {
+		if r.EventID == d.Events[0].ID {
+			rooms++
+		}
+	}
+	for _, s := range d.Sessions {
+		if s.EventID == d.Events[0].ID {
+			sessions++
+		}
+	}
+	if rooms < 2 || sessions < 8 {
+		t.Fatalf("spring schedule too thin: rooms=%d sessions=%d", rooms, sessions)
+	}
 }
 
 func TestGenerateIsDeterministic(t *testing.T) {
-	a := Generate("x")
-	b := Generate("x")
-	if a.Events[0].ID != b.Events[0].ID {
-		t.Fatal("event ids should be stable")
+	for _, size := range []Size{SizeSmall, SizeFull} {
+		a := Generate("x", size)
+		b := Generate("x", size)
+		if a.Events[0].ID != b.Events[0].ID {
+			t.Fatalf("%s: event ids should be stable", size.Label)
+		}
+		if a.Users[7].Email != b.Users[7].Email {
+			t.Fatalf("%s: user emails should be stable", size.Label)
+		}
+		if a.Invitations[123].Email != b.Invitations[123].Email {
+			t.Fatalf("%s: invitation emails should be stable", size.Label)
+		}
 	}
-	if a.Users[7].Email != b.Users[7].Email {
-		t.Fatal("user emails should be stable")
+}
+
+func TestParseSize(t *testing.T) {
+	if ParseSize("").Label != "small" || ParseSize("SMALL").Label != "small" {
+		t.Fatal("empty / small should be the default")
 	}
-	if a.Invitations[123].Email != b.Invitations[123].Email {
-		t.Fatal("invitation emails should be stable")
+	if ParseSize("full").Label != "full" || ParseSize("FULL").Label != "full" {
+		t.Fatal("full")
 	}
 }
