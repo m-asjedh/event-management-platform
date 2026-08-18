@@ -114,10 +114,15 @@ services:
     volumes:
       - ./frontend:/work/frontend
       - ./openapi:/work/openapi:ro
+    # typescript is a peer of openapi-typescript; npx does not install peers.
     command:
       - npx
       - --yes
+      - --package
+      - typescript@6.0.3
+      - --package
       - openapi-typescript@7.13.0
+      - openapi-typescript
       - ../openapi/openapi.yaml
       - -o
       - src/generated/api.ts
