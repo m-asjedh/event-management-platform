@@ -1,0 +1,26 @@
+README.md
+  s_a0ce08ea017ba1::t_f75aefcb9b23f3 9-11,13-15,19-29
+  h_3283e2518520ac 17,31-32
+  s_a0ce08ea017ba1::t_15e4ae8a6b41f2 7-8,12,16,18,30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "e923d7761b65e50c3ff61a3d45620d6955267e68",
+  "prompts": {},
+  "humans": {
+    "h_3283e2518520ac": {
+      "author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
