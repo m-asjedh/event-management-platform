@@ -1,0 +1,37 @@
+README.md
+  s_a0ce08ea017ba1::t_fc75d1da3b81fe 97
+  s_a0ce08ea017ba1::t_ba1e5ad8f2476e 11-21
+  s_a0ce08ea017ba1::t_ca18cc7b0a2fbb 81
+frontend/README.md
+  s_a0ce08ea017ba1::t_7a7a504d6ab826 25-26
+TRADEOFFS.md
+  s_a0ce08ea017ba1::t_c1d55a47829a00 42-45
+  s_a0ce08ea017ba1::t_801b8877627151 49-52
+  s_a0ce08ea017ba1::t_ab49b66ead7964 13-18
+  s_a0ce08ea017ba1::t_99a2c862d957b1 139-173
+  s_a0ce08ea017ba1::t_098a69f91e9f61 3-5
+AI-WORKFLOW.md
+  s_a0ce08ea017ba1::t_c614b7dfe66856 141,143,149-153,155-157,163
+  s_a0ce08ea017ba1::t_6e018763fc5556 45-46
+  s_a0ce08ea017ba1::t_28c58ae565c970 164-167
+  s_a0ce08ea017ba1::t_f241df39061930 196-197
+  s_a0ce08ea017ba1::t_3c8ea26ebb1132 25-29
+  s_a0ce08ea017ba1::t_39bbb78149877c 52-56
+  s_a0ce08ea017ba1::t_4741a270056caf 142,144-148,154,158-162,168
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "1c847c77526cfb0a2701f8e2751ee30263d936be",
+  "prompts": {},
+  "sessions": {
+    "s_a0ce08ea017ba1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "77b05391-2006-40fa-a2f2-1e4fd9124c2a",
+        "model": "grok-4.6"
+      },
+      "human_author": "Mohamed Asjedh <m.asjedhcr7@gmail.com>"
+    }
+  }
+}
